@@ -1,0 +1,28 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx8664.22.09.d
+-RUNMODE
+-sv
+-INCDIR
+../../../bench/verilog
+-INCDIR
+../../../rtl/verilog
+../../../rtl/verilog/i2c_master_bit_ctrl.v
+../../../rtl/verilog/i2c_master_byte_ctrl.v
+../../../rtl/verilog/i2c_master_top.v
+../../../bench/verilog/i2c_slave_model.v
+../../../bench/verilog/wb_master_model.v
+../../../bench/verilog/tst_bench_top.v
+-CDSLIB
+./xcelium.d/run.lnx8664.22.09.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx8664.22.09.d/hdlrun.var
+-no_analogsolver
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx8664.22.09.d/xllibs
+-ALLOWUNBOUND

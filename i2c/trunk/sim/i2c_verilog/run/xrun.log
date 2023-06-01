@@ -1,0 +1,151 @@
+xrun(64): 22.09-s007: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	22.09-s007: Started on May 30, 2023 at 16:13:21 -03
+xrun
+	-sv
+	-access rwc
+	+incdir+../../../bench/verilog
+	+incdir+../../../rtl/verilog
+	-input shm.tcl
+	../../../rtl/verilog/i2c_master_bit_ctrl.v
+	../../../rtl/verilog/i2c_master_byte_ctrl.v
+	../../../rtl/verilog/i2c_master_top.v
+	../../../bench/verilog/i2c_slave_model.v
+	../../../bench/verilog/wb_master_model.v
+	../../../bench/verilog/tst_bench_top.v
+file: ../../../rtl/verilog/i2c_master_bit_ctrl.v
+	module worklib.i2c_master_bit_ctrl:v
+		errors: 0, warnings: 0
+file: ../../../rtl/verilog/i2c_master_byte_ctrl.v
+	module worklib.i2c_master_byte_ctrl:v
+		errors: 0, warnings: 0
+file: ../../../rtl/verilog/i2c_master_top.v
+	module worklib.i2c_master_top:v
+		errors: 0, warnings: 0
+file: ../../../bench/verilog/i2c_slave_model.v
+	module worklib.i2c_slave_model:v
+		errors: 0, warnings: 0
+file: ../../../bench/verilog/wb_master_model.v
+	module worklib.wb_master_model:v
+		errors: 0, warnings: 0
+file: ../../../bench/verilog/tst_bench_top.v
+	module worklib.tst_bench_top:v
+		errors: 0, warnings: 0
+	module worklib.delay:v
+		errors: 0, warnings: 0
+xmvlog: *W,SPDUSD: Include directory ../../../bench/verilog given but not used.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 1
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		tst_bench_top
+xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.delay:v <0x7750f14d>
+			streams:   0, words:     0
+		worklib.delay:v <0x5eeae34b>
+			streams:   0, words:     0
+		worklib.i2c_master_bit_ctrl:v <0x5868ac83>
+			streams:  41, words: 33222
+		worklib.i2c_master_byte_ctrl:v <0x6f61cc5b>
+			streams:  31, words: 20371
+		worklib.i2c_master_top:v <0x4c52b1a1>
+			streams:  35, words: 18668
+		worklib.tst_bench_top:v <0x1680e642>
+			streams:  15, words: 66556
+		worklib.i2c_slave_model:v <0x33284a7b>
+			streams:  28, words: 23258
+		worklib.wb_master_model:v <0x053dc613>
+			streams:   4, words:  9877
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                  Instances  Unique
+		Modules:                 13       7
+		Primitives:               2       1
+		Timing outputs:           4       1
+		Registers:              121      77
+		Scalar wires:           101       -
+		Expanded wires:           6       2
+		Vectored wires:          15       -
+		Always blocks:           52      30
+		Initial blocks:           3       3
+		Cont. assignments:       33      34
+		Pseudo assignments:      16      12
+		Timing checks:            6       4
+		Simulation timescale:  10ps
+	Writing initial simulation snapshot: worklib.tst_bench_top:v
+Loading snapshot worklib.tst_bench_top:v .................... Done
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+xcelium> source /opt/cadence/XCELIUM2209/tools/xcelium/files/xmsimrc
+xcelium> database -open waves -shm
+Created SHM database waves
+xcelium> probe -create tst_bench_top -depth all -all -memories -shm -database waves
+Created probe 1
+xcelium> run 18 ms -absolute
+
+status:                    0 Testbench started
+
+
+
+INFO: WISHBONE MASTER MODEL INSTANTIATED (tst_bench_top.u0)
+
+status:                  500 done reset
+status:                 9600 programmed registers
+status:                13600 verified registers
+status:                16600 core enabled
+status:                21600 generate 'start', write cmd 20 (slave address+write)
+status:             11340600 tip==0
+status:             11345600 write slave memory address 01
+status:             21438600 tip==0
+status:             21443600 write data a5
+status:             40972600 tip==0
+status:             40977600 write next data 5a, generate 'stop'
+status:             52191600 tip==0
+status:             52196600 generate 'start', write cmd 20 (slave address+write)
+status:             63512600 tip==0
+status:             63517600 write slave address 01
+status:             73612600 tip==0
+status:             73617600 generate 'repeated start', write cmd 21 (slave address+read)
+
+Warning!  Timing violation
+           $setup( posedge scl:742686 NS, negedge sda &&& scl:745866 NS,  4700.00 : 4700 NS );
+            File: /home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/i2c_slave_model.v, line = 348
+           Scope: tst_bench_top.i2c_slave
+            Time: 745866 NS
+
+status:             85035600 tip==0
+status:             85038600 read + ack
+status:             95133600 tip==0
+status:             95136600 received a5
+status:             95139600 read + ack
+status:            105231600 tip==0
+status:            105234600 received 5a
+status:            105237600 read + ack
+status:            115329600 tip==0
+status:            115332600 received xx from 3rd read address
+status:            115335600 read + nack
+status:            125427600 tip==0
+status:            125430600 received xx from 4th read address
+status:            125435600 generate 'start', write cmd 20 (slave address+write). Check invalid address
+
+Warning!  Timing violation
+           $setup( posedge scl:1260846 NS, negedge sda &&& scl:1264026 NS,  4700.00 : 4700 NS );
+            File: /home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/i2c_slave_model.v, line = 348
+           Scope: tst_bench_top.i2c_slave
+            Time: 1264026 NS
+
+status:            136850600 tip==0
+status:            136855600 write slave memory address 10
+status:            146950600 tip==0
+status:            146950600 Check for nack
+status:            146953600 generate 'stop'
+status:            146956600 tip==0
+
+
+status:            171956600 Testbench done
+Simulation complete via $finish(1) at time 1719566 NS + 0
+/home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/tst_bench_top.v:448 	      $finish;
+xcelium> exit
+TOOL:	xrun(64)	22.09-s007: Exiting on May 30, 2023 at 16:13:23 -03  (total: 00:00:02)
