@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module i2c (
+module i2c_master (
     input logic       clk,
     input logic       reset,
     input logic       start,
