@@ -211,7 +211,7 @@ module i2c_master (
                     sda = 1;
                 
                 end
-                default: sda = 0; 
+                default:  
         endcase
         
     end
