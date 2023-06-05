@@ -85,6 +85,7 @@ module tb;
         rw_in = 'h1;
         addr_in = 7'h55;
         data_in = 8'h01;
+        i2c_sda_in = data_in;
 
         #200;
 
