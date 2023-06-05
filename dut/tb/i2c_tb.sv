@@ -42,10 +42,9 @@ module tb;
         .rw(rw_in),
         .addr(addr_in),
         .w_data(data_in),
-        .i2c_sda_i(i2c_sda),
 
         .i2c_scl(i2c_slc),
-        .i2c_sda_o(i2c_sda)
+        .i2c_sda(i2c_sda)
     );
 
 
