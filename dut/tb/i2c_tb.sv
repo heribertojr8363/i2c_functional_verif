@@ -76,7 +76,7 @@ module tb;
 
         stop_in = 'h1;
 
-        #50
+        #50;
         
 
         @(negedge clk);
@@ -85,13 +85,17 @@ module tb;
         rw_in = 'h1;
         addr_in = 7'h55;
         data_in = 8'h01;
-        i2c_sda_in = data_in;
+
+        for (int i = 7; i < 0; i--) begin
+            #5;
+            i2c_sda = data_in[i];
+        end
 
         #200;
 
         stop_in = 'h1;
 
-        #50
+        #50;
 
         /*@(negedge clk);
         start = 'h1;
