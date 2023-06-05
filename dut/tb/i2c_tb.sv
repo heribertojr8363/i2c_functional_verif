@@ -6,7 +6,7 @@ module tb;
     logic reset;
     logic start_in;
     logic stop_in;
-    logic rw_in
+    logic rw_in;
     logic [6:0] addr_in;
     logic [7:0] data_in;
 
@@ -41,10 +41,11 @@ module tb;
         .stop(stop_in),
         .rw(rw_in),
         .addr(addr_in),
-        .data(data_in),
+        .w_data(data_in),
+        .i2c_sda_i(i2c_sda),
 
-        .i2c_sda(i2c_sda),
-        .i2c_scl(i2c_slc)
+        .i2c_scl(i2c_slc),
+        .i2c_sda_o(i2c_sda)
     );
 
 

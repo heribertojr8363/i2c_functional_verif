@@ -6,15 +6,16 @@ module i2c_master (
     input logic       reset,
     input logic       start,
     input logic       stop,
-    input logic       rw;
+    input logic       rw,
     input logic [6:0] addr,
     input logic [7:0] w_data,
+    input logic       i2c_sda_i,
 
     //Outputs
-    inout logic      i2c_sda,
-    output logic      i2c_scl
+    output logic      i2c_scl,
+    output  logic     i2c_sda_o
+    
 );
-
 
     typedef enum logic [2:0] 
     {
@@ -70,7 +71,7 @@ module i2c_master (
             case (current)
                 
                 STATE_IDLE: begin
-                    i2c_sda <= 1;
+                    i2c_sda_o <= 1;
                     if(start) begin
                         next <= STATE_START;
                         saved_addr <= addr;
@@ -82,64 +83,70 @@ module i2c_master (
                 end
 
                 STATE_START: begin
-                    i2c_sda <= 0;
+                    i2c_sda_o <= 0;
                     next <= STATE_ADDR;
                     count <= 6;
                     
                 end
 
                 STATE_ADDR: begin
-                    i2c_sda <= saved_addr[count];
+                    i2c_sda_o <= saved_addr[count];
                     if(count == 0) next <= STATE_RW;
                     else count <= count - 1;
                     
                 end
 
                 STATE_RW: begin
-                    i2c_sda <= rw;
+                    i2c_sda_o <= rw;
                     next <= STATE_ACK;
                     
                 end
 
                 STATE_ACK: begin
-                    ack_addr <= i2c_sda;
-                    if(!i2c_sda) begin
+                    ack_addr <= i2c_sda_i;
+                    if(!i2c_sda_i) begin
                         next <= STATE_DATA;
                         count <= 7;
                     end
                     else begin
-                        i2c_sda <= 0;
+                        i2c_sda_o <= 0;
                         next <= STATE_STOP;
                     end
                     
                 end
 
                 STATE_DATA: begin
-                    if(!rw) i2c_sda <= saved_wdata[count];
-                    else r_data[count] <= i2c_sda;
+                    if(!rw) begin
+                        i2c_sda_o <= saved_wdata[count];
+                    end
+
+                    else begin
+                        r_data[count] <= i2c_sda_i;
+                    end
+
                     if(count == 0) next <= STATE_ACK2;
                     else count <= count - 1;
                     
                 end
 
                 STATE_ACK2: begin
-                    ack_data <= i2c_sda;
-                    if(!i2c_sda) begin
+                    ack_data <= i2c_sda_i;
+                    if(!i2c_sda_i) begin
                         if(stop) begin
-                            i2c_sda <= 0;
+                            i2c_sda_o <= 0;
                             next <= STATE_STOP;
                         end
                         else next <= STATE_DATA;
                     end 
                     else begin
-                        i2c_sda <= 0;
+                        i2c_sda_o <= 0;
                         next <= STATE_STOP;
                     end
 
                 end
 
                 STATE_STOP: begin
-                    i2c_sda <= 1;
+                    i2c_sda_o <= 1;
                     next <= STATE_IDLE;
                 
                 end

@@ -1,0 +1,71 @@
+xrun(64): 22.09-s007: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	22.09-s007: Started on Jun 05, 2023 at 14:33:03 -03
+xrun
+	-sv
+	-access rwc
+	+incdir+../tb
+	+incdir+../src
+	-input shm.tcl
+	../src/i2c_master.sv
+	../tb/i2c_tb.sv
+Recompiling... reason: file './i2c_tb.sv' is newer than expected.
+	expected: Mon Jun  5 14:23:44 2023
+	actual:   Mon Jun  5 14:33:01 2023
+file: ../src/i2c_master.sv
+	module worklib.i2c_master:sv
+		errors: 0, warnings: 0
+file: ../tb/i2c_tb.sv
+	module worklib.tb:sv
+		errors: 0, warnings: 0
+xmvlog: *W,SPDUSD: Include directory ../tb given but not used.
+xmvlog: *W,SPDUSD: Include directory ../src given but not used.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 2
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		tb
+xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.i2c_master:sv <0x0369a8cc>
+			streams:  13, words:  6667
+		worklib.tb:sv <0x1c11fd8d>
+			streams:  12, words:  7485
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                 2       2
+		Registers:              20      20
+		Scalar wires:           11       -
+		Vectored wires:          2       -
+		Always blocks:           3       3
+		Initial blocks:          2       2
+		Cont. assignments:       1       1
+		Pseudo assignments:     10      10
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.tb:sv
+Loading snapshot worklib.tb:sv .................... Done
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+xcelium> source /opt/cadence/XCELIUM2209/tools/xcelium/files/xmsimrc
+xcelium> database -open waves -shm
+Created SHM database waves
+xcelium> probe -create tb -depth all -all -memories -shm -database waves
+Created probe 1
+xcelium> run 18 ms -absolute
+xmsim: *F,INTERR: INTERNAL EXCEPTION
+Observed simulation time : 0 FS + 0
+-----------------------------------------------------------------
+The tool has encountered an unexpected condition and must exit.
+Contact Cadence Design Systems customer support about this
+problem and provide enough information to help us reproduce it,
+including the logfile that contains this error message.
+  TOOL:	xmsim(64)	22.09-s007
+  HOSTNAME: computer226
+  OPERATING SYSTEM: Linux 4.18.0-477.13.1.el8_8.x86_64 #1 SMP Thu May 18 10:27:05 EDT 2023 x86_64
+  MESSAGE: T(0): sv_seghandler - trapno -1 addr(0x59d186c)
+	Stream rts_xfer
+-----------------------------------------------------------------
+csi-xmsim - CSI: Cadence Support Investigation, sending details to /home/xmen/Microeletronica/TCC/dut/tb/xmsim_6637.err
+csi-xmsim - CSI: investigation complete, send /home/xmen/Microeletronica/TCC/dut/tb/xmsim_6637.err to Cadence Support
