@@ -9,24 +9,23 @@ module i2c_master (
     input logic       rw,
     input logic [6:0] addr,
     input logic [7:0] w_data,
-    input logic       i2c_sda_i,
 
     //Outputs
-    output logic      i2c_scl,
-    output  logic     i2c_sda_o
+    output  logic     i2c_scl,
+    inout   logic     i2c_sda
     
 );
 
     typedef enum logic [2:0] 
     {
         STATE_IDLE,     //00
-        STATE_START,     //01
+        STATE_START,    //01
         STATE_ADDR,     //02
-        STATE_RW,      //03
-        STATE_ACK,
-        STATE_DATA,
-        STATE_ACK2,
-        STATE_STOP
+        STATE_RW,       //03
+        STATE_ACK,      //04
+        STATE_DATA,     //05
+        STATE_ACK2,     //06
+        STATE_STOP      //07
     } state;
 
     state current, next;
@@ -48,9 +47,12 @@ module i2c_master (
     logic ack_data;
     logic [7:0] saved_wdata;
 
+    logic sda_enable;
+    logic sda;
+
 
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
-    //assign ready = ((reset == 0) && (current == STATE_IDLE)) ? 1 : 0;
+    assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
     always_ff @(negedge clk) begin
@@ -97,7 +99,7 @@ module i2c_master (
                 end
 
                 STATE_ACK: begin
-                    if(!i2c_sda_i) begin
+                    if(!ack_addr) begin
                         next <= STATE_DATA;
                         count <= 7;
                     end
@@ -114,7 +116,7 @@ module i2c_master (
                 end
 
                 STATE_ACK2: begin
-                    if(!i2c_sda_i) begin
+                    if(!ack_data) begin
                         if(stop) begin
                             next <= STATE_STOP;
                         end
@@ -136,72 +138,80 @@ module i2c_master (
     always_comb begin
         case (current)
             STATE_IDLE: begin
-                    i2c_sda_o = 1;
+                    sda_enable = 1;
+                    sda = 1;
                     if(start) begin
                         saved_addr = addr;
                         saved_wdata = w_data;
                     end
 
-                    else i2c_sda_o = i2c_sda_o;
+                    else sda = sda;
 
                 end
 
                 STATE_START: begin
-                    i2c_sda_o = 0;
+                    sda_enable = 1;
+                    sda = 0;
                     
                 end
 
                 STATE_ADDR: begin
-                    i2c_sda_o = saved_addr[count];
+                    sda_enable = 1;
+                    sda = saved_addr[count];
                     
                 end
 
                 STATE_RW: begin
-                    i2c_sda_o = rw;
+                    sda_enable = 1;
+                    sda = rw;
                     
                 end
 
                 STATE_ACK: begin
-                    ack_addr = i2c_sda_i;
-                    if(!i2c_sda_i) begin
-                        i2c_sda_o = i2c_sda_o;
+                    sda_enable = 1;
+                    ack_addr = sda;
+                    if(!ack_addr) begin
+                        sda = sda;
                     end
                     else begin
-                        i2c_sda_o = 0;
+                        sda = 0;
                     end
                     
                 end
 
                 STATE_DATA: begin
+                    sda_enable = 1;
                     if(!rw) begin
-                        i2c_sda_o = saved_wdata[count];
+                        sda = saved_wdata[count];
                     end
 
                     else begin
-                        r_data[count] = i2c_sda_i;
+                        r_data[count] = sda;
                     end
                     
                 end
 
                 STATE_ACK2: begin
-                    ack_data = i2c_sda_i;
-                    if(!i2c_sda_i) begin
+                    sda_enable = 1;
+                    ack_data = sda;
+                    if(!ack_data) begin
                         if(stop) begin
-                            i2c_sda_o = 0;
+                            sda = 0;
                         end
-                        else i2c_sda_o = i2c_sda_o;
+                        else sda = sda;
                     end 
                     else begin
-                        i2c_sda_o = 0;
+                        sda = 0;
                     end
 
                 end
 
                 STATE_STOP: begin
-                    i2c_sda_o = 1;
+                    sda_enable = 1;
+                    sda = 1;
                 
                 end
-                default:  
+                default: sda = 0; 
         endcase
         
     end
