@@ -1,15 +1,18 @@
 `timescale 1ns/1ps
 
 module i2c_master (
+    //Inputs coming from master device logic
     input logic       clk,
     input logic       reset,
     input logic       start,
+    input logic       stop,
+    input logic       rw;
     input logic [6:0] addr,
-    input logic [7:0] data,
+    input logic [7:0] w_data,
 
-    output logic      i2c_sda,
-    output logic      i2c_scl,
-    output logic      ready
+    //Outputs
+    inout logic      i2c_sda,
+    output logic      i2c_scl
 );
 
 
@@ -19,9 +22,9 @@ module i2c_master (
         STATE_START,     //01
         STATE_ADDR,     //02
         STATE_RW,      //03
-        STATE_WACK,
+        STATE_ACK,
         STATE_DATA,
-        STATE_WACK2,
+        STATE_ACK2,
         STATE_STOP
     } state;
 
@@ -39,10 +42,14 @@ module i2c_master (
     logic i2c_scl_enable;
 
     logic [6:0] saved_addr;
-    logic [7:0] saved_data;
+    logic [7:0] r_data;
+    logic ack_addr;
+    logic ack_data;
+    logic [7:0] saved_wdata;
+
 
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
-    assign ready = ((reset == 0) && (current == STATE_IDLE)) ? 1 : 0;
+    //assign ready = ((reset == 0) && (current == STATE_IDLE)) ? 1 : 0;
 
 
     always_ff @(negedge clk) begin
@@ -67,7 +74,7 @@ module i2c_master (
                     if(start) begin
                         next <= STATE_START;
                         saved_addr <= addr;
-                        saved_data <= data;
+                        saved_wdata <= w_data;
                     end
 
                     else next <= STATE_IDLE;
@@ -89,26 +96,45 @@ module i2c_master (
                 end
 
                 STATE_RW: begin
-                    i2c_sda <= 1;
-                    next <= STATE_WACK;
+                    i2c_sda <= rw;
+                    next <= STATE_ACK;
                     
                 end
 
-                STATE_WACK: begin
-                    next <= STATE_DATA;
-                    count <= 7;
+                STATE_ACK: begin
+                    ack_addr <= i2c_sda;
+                    if(!i2c_sda) begin
+                        next <= STATE_DATA;
+                        count <= 7;
+                    end
+                    else begin
+                        i2c_sda <= 0;
+                        next <= STATE_STOP;
+                    end
                     
                 end
 
                 STATE_DATA: begin
-                    i2c_sda <= saved_data[count];
-                    if(count == 0) next <= STATE_WACK2;
+                    if(!rw) i2c_sda <= saved_wdata[count];
+                    else r_data[count] <= i2c_sda;
+                    if(count == 0) next <= STATE_ACK2;
                     else count <= count - 1;
                     
                 end
 
-                STATE_WACK2: begin
-                    next <= STATE_STOP;
+                STATE_ACK2: begin
+                    ack_data <= i2c_sda;
+                    if(!i2c_sda) begin
+                        if(stop) begin
+                            i2c_sda <= 0;
+                            next <= STATE_STOP;
+                        end
+                        else next <= STATE_DATA;
+                    end 
+                    else begin
+                        i2c_sda <= 0;
+                        next <= STATE_STOP;
+                    end
 
                 end
 

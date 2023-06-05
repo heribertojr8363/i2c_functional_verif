@@ -9,10 +9,7 @@ XCELIUM_FLAGS = -access rwc \
 	-input shm.tcl
 
 # Arquivos fonte
-RTL_FILES = $(I2C_DIR)/src/i2c.sv \
-	$(I2C_DIR)/src/i2c_clk_divider.sv \
-	$(I2C_DIR)/src/i2c_fifo.sv \
-	$(I2C_DIR)/src/i2c_fifo_master.sv 
+RTL_FILES = $(I2C_DIR)/src/i2c_master.sv
 
 BENCH_FILES = $(BENCH_DIR)/i2c_tb.sv
 

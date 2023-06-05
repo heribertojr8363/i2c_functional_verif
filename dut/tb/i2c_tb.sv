@@ -33,7 +33,7 @@ module tb;
         .ready_out(ready_out)
     );*/
 
-    i2c dut(
+    i2c_master dut(
         .clk(clk),
         .reset(reset),
         .start(start),
@@ -63,7 +63,7 @@ module tb;
         #5;
 
         @(negedge clk);
-        start = 1;
+        start = 'h1;
         addr_in = 7'h55;
         data_in = 8'haa;
 
@@ -71,14 +71,14 @@ module tb;
         
 
         @(negedge clk);
-        start = 1;
+        start = 'h1;
         addr_in = 7'h55;
         data_in = 8'h01;
 
         #300;
 
         @(negedge clk);
-        start = 1;
+        start = 'h1;
         addr_in = 7'h55;
         data_in = 8'hd3;
         

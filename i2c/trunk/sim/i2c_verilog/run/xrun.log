@@ -1,5 +1,5 @@
 xrun(64): 22.09-s007: (c) Copyright 1995-2023 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	22.09-s007: Started on May 30, 2023 at 16:13:21 -03
+TOOL:	xrun(64)	22.09-s007: Started on Jun 05, 2023 at 11:46:54 -03
 xrun
 	-sv
 	-access rwc
@@ -84,68 +84,17 @@ Created SHM database waves
 xcelium> probe -create tst_bench_top -depth all -all -memories -shm -database waves
 Created probe 1
 xcelium> run 18 ms -absolute
-
-status:                    0 Testbench started
-
-
-
-INFO: WISHBONE MASTER MODEL INSTANTIATED (tst_bench_top.u0)
-
-status:                  500 done reset
-status:                 9600 programmed registers
-status:                13600 verified registers
-status:                16600 core enabled
-status:                21600 generate 'start', write cmd 20 (slave address+write)
-status:             11340600 tip==0
-status:             11345600 write slave memory address 01
-status:             21438600 tip==0
-status:             21443600 write data a5
-status:             40972600 tip==0
-status:             40977600 write next data 5a, generate 'stop'
-status:             52191600 tip==0
-status:             52196600 generate 'start', write cmd 20 (slave address+write)
-status:             63512600 tip==0
-status:             63517600 write slave address 01
-status:             73612600 tip==0
-status:             73617600 generate 'repeated start', write cmd 21 (slave address+read)
-
-Warning!  Timing violation
-           $setup( posedge scl:742686 NS, negedge sda &&& scl:745866 NS,  4700.00 : 4700 NS );
-            File: /home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/i2c_slave_model.v, line = 348
-           Scope: tst_bench_top.i2c_slave
-            Time: 745866 NS
-
-status:             85035600 tip==0
-status:             85038600 read + ack
-status:             95133600 tip==0
-status:             95136600 received a5
-status:             95139600 read + ack
-status:            105231600 tip==0
-status:            105234600 received 5a
-status:            105237600 read + ack
-status:            115329600 tip==0
-status:            115332600 received xx from 3rd read address
-status:            115335600 read + nack
-status:            125427600 tip==0
-status:            125430600 received xx from 4th read address
-status:            125435600 generate 'start', write cmd 20 (slave address+write). Check invalid address
-
-Warning!  Timing violation
-           $setup( posedge scl:1260846 NS, negedge sda &&& scl:1264026 NS,  4700.00 : 4700 NS );
-            File: /home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/i2c_slave_model.v, line = 348
-           Scope: tst_bench_top.i2c_slave
-            Time: 1264026 NS
-
-status:            136850600 tip==0
-status:            136855600 write slave memory address 10
-status:            146950600 tip==0
-status:            146950600 Check for nack
-status:            146953600 generate 'stop'
-status:            146956600 tip==0
-
-
-status:            171956600 Testbench done
-Simulation complete via $finish(1) at time 1719566 NS + 0
-/home/xmen/Microeletronica/TCC/i2c/trunk/bench/verilog/tst_bench_top.v:448 	      $finish;
-xcelium> exit
-TOOL:	xrun(64)	22.09-s007: Exiting on May 30, 2023 at 16:13:23 -03  (total: 00:00:02)
+xmsim: *F,INTERR: INTERNAL EXCEPTION
+Observed simulation time : 0 FS + 0
+-----------------------------------------------------------------
+The tool has encountered an unexpected condition and must exit.
+Contact Cadence Design Systems customer support about this
+problem and provide enough information to help us reproduce it,
+including the logfile that contains this error message.
+  TOOL:	xmsim(64)	22.09-s007
+  HOSTNAME: computer226
+  OPERATING SYSTEM: Linux 4.18.0-477.13.1.el8_8.x86_64 #1 SMP Thu May 18 10:27:05 EDT 2023 x86_64
+  MESSAGE: T(0): sv_seghandler - trapno -1 addr(0x4eb348c)
+	Stream rts_xfer
+-----------------------------------------------------------------
+csi-xmsim - CSI: Cadence Support Investigation, sending details to /home/xmen/Microeletronica/TCC/i2c/trunk/sim/i2c_verilog/run/xmsim_19048.err

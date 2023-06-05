@@ -1,1 +1,0 @@
-s1(31May2023:19:42:51):  xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl ../src/i2c.sv ../src/i2c_clk_divider.sv ../src/i2c_fifo.sv ../src/i2c_fifo_master.sv ../tb/i2c_tb.sv 
