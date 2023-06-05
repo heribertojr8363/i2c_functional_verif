@@ -1,1 +1,3 @@
 s1(05Jun2023:15:48:00):  xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl ../src/i2c_master.sv ../tb/i2c_tb.sv 
+s2(05Jun2023:18:22:18):  xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl ../src/i2c_master.sv ../tb/i2c_tb.sv 
+s3(05Jun2023:18:22:44):  xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl ../src/i2c_master.sv ../tb/i2c_tb.sv 

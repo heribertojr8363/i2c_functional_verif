@@ -47,12 +47,15 @@ module i2c_master (
     logic ack_data;
     logic [7:0] saved_wdata;
 
-    logic sda_enable;
-    logic sda;
+    //logic sda_enable;
+    //logic sda;
+
+    // criar variavel io para definir a direção de i2c_sda
 
 
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
-    assign i2c_sda = (sda_enable) ? sda : 'bz;
+
+    //assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
     always_ff @(negedge clk) begin
@@ -138,7 +141,7 @@ module i2c_master (
     always_comb begin
         case (current)
             STATE_IDLE: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     sda = 1;
                     if(start) begin
                         saved_addr = addr;
@@ -150,25 +153,25 @@ module i2c_master (
                 end
 
                 STATE_START: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     sda = 0;
                     
                 end
 
                 STATE_ADDR: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     sda = saved_addr[count];
                     
                 end
 
                 STATE_RW: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     sda = rw;
                     
                 end
 
                 STATE_ACK: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     ack_addr = sda;
                     if(!ack_addr) begin
                         sda = sda;
@@ -180,7 +183,7 @@ module i2c_master (
                 end
 
                 STATE_DATA: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     if(!rw) begin
                         sda = saved_wdata[count];
                     end
@@ -192,7 +195,7 @@ module i2c_master (
                 end
 
                 STATE_ACK2: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     ack_data = sda;
                     if(!ack_data) begin
                         if(stop) begin
@@ -207,7 +210,7 @@ module i2c_master (
                 end
 
                 STATE_STOP: begin
-                    sda_enable = 1;
+                    //sda_enable = 1;
                     sda = 1;
                 
                 end
