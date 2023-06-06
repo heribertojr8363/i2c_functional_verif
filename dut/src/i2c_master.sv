@@ -72,6 +72,19 @@ module i2c_master (
         end
     end
 
+    always_ff @( negedge i2c_scl ) begin 
+        case (current)
+            STATE_ADDR: begin
+                count <= count - 1;
+            end
+
+            STATE_DATA: begin
+                count <= count -1;
+            end
+            
+        endcase
+    end
+
     always_ff @(posedge clk) begin
             case (current)
                 
@@ -97,8 +110,6 @@ module i2c_master (
                         next <= STATE_RW;
                         //io <= 1;
                     end
-
-                    else count <= count - 1;
                     
                 end
 
@@ -125,8 +136,6 @@ module i2c_master (
                     if(count == 0) begin
                         next <= STATE_ACK2;
                     end
-
-                    else count <= count - 1;
                     
                 end
 
