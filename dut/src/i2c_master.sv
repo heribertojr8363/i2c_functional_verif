@@ -47,11 +47,14 @@ module i2c_master (
     logic ack_data;
     logic [7:0] saved_wdata;
 
-    logic sda_enable;
-    logic sda;
 
+    // criar variavel io para definir a direção de i2c_sda
+    logic io;   // in (io = 0); out (io = 1);
+    logic sda;
+    logic sda_enable;
 
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
+
     assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
@@ -138,37 +141,43 @@ module i2c_master (
     always_comb begin
         case (current)
             STATE_IDLE: begin
-                    sda_enable = 1;
-                    sda = 1;
-                    if(start) begin
-                        saved_addr = addr;
-                        saved_wdata = w_data;
-                    end
+                sda_enable = 1;
+                if(io)  sda = 1;
+                else    sda = sda;
 
-                    else sda = sda;
-
+                if(start) begin
+                    saved_addr = addr;
+                    saved_wdata = w_data;
                 end
 
-                STATE_START: begin
-                    sda_enable = 1;
-                    sda = 0;
+                else sda = sda;
+
+            end
+
+            STATE_START: begin
+                sda_enable = 1;
+                if(io) sda = 0;
+                else   sda = sda;
                     
-                end
+            end
 
-                STATE_ADDR: begin
-                    sda_enable = 1;
-                    sda = saved_addr[count];
+            STATE_ADDR: begin
+                sda_enable = 1;
+                if(io) sda = saved_addr[count];
+                else   sda = sda;
                     
-                end
+            end
 
-                STATE_RW: begin
-                    sda_enable = 1;
-                    sda = rw;
+            STATE_RW: begin
+                sda_enable = 1;
+                if(io) sda = rw;
+                else   sda = sda;
                     
-                end
+            end
 
-                STATE_ACK: begin
-                    sda_enable = 1;
+            STATE_ACK: begin
+                sda_enable = 1;
+                if(!io) begin
                     ack_addr = sda;
                     if(!ack_addr) begin
                         sda = sda;
@@ -176,23 +185,31 @@ module i2c_master (
                     else begin
                         sda = 0;
                     end
-                    
                 end
 
-                STATE_DATA: begin
-                    sda_enable = 1;
-                    if(!rw) begin
-                        sda = saved_wdata[count];
-                    end
-
-                    else begin
-                        r_data[count] = sda;
-                    end
+                else begin
+                    sda = sda;
+                end
                     
+            end
+
+            STATE_DATA: begin
+                sda_enable = 1;
+                if(!rw) begin
+                    if(io) sda = saved_wdata[count];
+                    else sda = sda;
                 end
 
-                STATE_ACK2: begin
-                    sda_enable = 1;
+                else begin
+                    if(!io)    r_data[count] = sda;
+                    else       sda = sda;
+                end
+                    
+            end
+
+            STATE_ACK2: begin
+                sda_enable = 1;
+                if(!io) begin
                     ack_data = sda;
                     if(!ack_data) begin
                         if(stop) begin
@@ -203,15 +220,22 @@ module i2c_master (
                     else begin
                         sda = 0;
                     end
-
                 end
 
-                STATE_STOP: begin
-                    sda_enable = 1;
-                    sda = 1;
+                else begin
+                    sda = sda;
+                end
+
+            end
+
+            STATE_STOP: begin
+                sda_enable = 1;
+                if(io)   sda = 1;
+                else     sda = sda;
                 
-                end
-                default: sda = 0;
+             end
+
+            default: sda = 0;
         endcase
         
     end
