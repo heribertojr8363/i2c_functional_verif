@@ -1,5 +1,0 @@
-//
-// File created by:  xrun
-// Do not modify this file
-
-s1::(05Jun2023:15:48:00):( xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl ../src/i2c_master.sv ../tb/i2c_tb.sv )
