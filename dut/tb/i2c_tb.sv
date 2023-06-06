@@ -9,6 +9,7 @@ module tb;
     logic rw_in;
     logic [6:0] addr_in;
     logic [7:0] data_in;
+    logic go;
 
     wire i2c_sda;
     logic i2c_slc;
@@ -54,6 +55,12 @@ module tb;
             clk = #5 ~clk;
         end
     end
+
+    always_ff @( posedge go ) begin
+        for (int i = 7; i < 0; i--) begin
+            i2c_sda = data_in[i];
+        end
+    end
     
     initial begin
         reset = 1;
@@ -70,6 +77,7 @@ module tb;
         rw_in = 'h0;
         addr_in = 7'h55;
         data_in = 8'haa;
+        go = 0;
 
         #300;
 
@@ -80,15 +88,15 @@ module tb;
 
         @(negedge clk);
         start_in = 'h1;
+        #10;
         stop_in = 'h0;
+        #10;
         rw_in = 'h1;
+        #10;
         addr_in = 7'h55;
-        //data_in = 8'h01;
-
-        for (int i = 7; i < 0; i--) begin
-            #5;
-            i2c_sda = data_in[i];
-        end
+        #10;
+        data_in = 8'h01;
+        go = 1;
 
         #300;
 
