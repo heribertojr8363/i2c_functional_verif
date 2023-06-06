@@ -78,7 +78,7 @@ module i2c_master (
                 STATE_IDLE: begin
                     if(start) begin
                         next <= STATE_START;
-                        io <= 1;
+                        //io <= 1;
                     end
 
                     else next <= STATE_IDLE;
@@ -88,14 +88,14 @@ module i2c_master (
                 STATE_START: begin
                     next <= STATE_ADDR;
                     count <= 6;
-                    io <= 1;
+                    //io <= 1;
                     
                 end
 
                 STATE_ADDR: begin
                     if(count == 0) begin
                         next <= STATE_RW;
-                        io <= 1;
+                        //io <= 1;
                     end
 
                     else count <= count - 1;
@@ -104,7 +104,7 @@ module i2c_master (
 
                 STATE_RW: begin
                     next <= STATE_ACK;
-                    io <= 1;
+                    //io <= 1;
                     
                 end
 
@@ -112,18 +112,18 @@ module i2c_master (
                     if(!ack_addr) begin
                         next <= STATE_DATA;
                         count <= 7;
-                        io <= 0;
+                        //io <= 0;
                     end
                     else begin
                         next <= STATE_STOP;
-                        io <= 0;
+                        //io <= 0;
                     end
                     
                 end
 
                 STATE_DATA: begin
-                    if(!rw)  io = 1;
-                    else io = 0;
+                    if(!rw)  //io = 1;
+                    else //io = 0;
                     
                     if(count == 0) begin
                         next <= STATE_ACK2;
@@ -137,15 +137,15 @@ module i2c_master (
                     if(!ack_data) begin
                         if(stop) begin
                             next <= STATE_STOP;
-                            io <= 0;
+                            //io <= 0;
                         end
                         else begin
                             next <= STATE_DATA;
-                            io <= 0;
+                            //io <= 0;
                         end
                     end 
                     else begin
-                        io <= 0;
+                        //io <= 0;
                         next <= STATE_STOP;
                     end
 
@@ -153,7 +153,7 @@ module i2c_master (
 
                 STATE_STOP: begin
                     next <= STATE_IDLE;
-                    io <= 1;
+                    //io <= 1;
                 
                 end
             endcase
@@ -163,6 +163,7 @@ module i2c_master (
         case (current)
             STATE_IDLE: begin
                 sda_enable = 1;
+                io = 1;
                 if(io)  sda = 1;
                 else    sda = sda;
 
@@ -176,6 +177,7 @@ module i2c_master (
             end
 
             STATE_START: begin
+                io = 1;
                 sda_enable = 1;
                 if(io) sda = 0;
                 else   sda = sda;
@@ -183,6 +185,7 @@ module i2c_master (
             end
 
             STATE_ADDR: begin
+                io = 1;
                 sda_enable = 1;
                 if(io) sda = saved_addr[count];
                 else   sda = sda;
@@ -190,6 +193,7 @@ module i2c_master (
             end
 
             STATE_RW: begin
+                io = 1;
                 sda_enable = 1;
                 if(io) sda = rw;
                 else   sda = sda;
@@ -197,6 +201,7 @@ module i2c_master (
             end
 
             STATE_ACK: begin
+                io = 0;
                 sda_enable = 1;
                 if(!io) begin
                     ack_addr = sda;
@@ -215,6 +220,7 @@ module i2c_master (
             end
 
             STATE_DATA: begin
+                io = 1;
                 sda_enable = 1;
 
                 if(io) sda = saved_wdata[count];
@@ -223,6 +229,7 @@ module i2c_master (
             end
 
             STATE_ACK2: begin
+                io = 0;
                 sda_enable = 1;
                 if(!io) begin
                     ack_data = sda;
@@ -244,6 +251,7 @@ module i2c_master (
             end
 
             STATE_STOP: begin
+                io = 1;
                 sda_enable = 1;
                 if(io)   sda = 1;
                 else     sda = sda;
