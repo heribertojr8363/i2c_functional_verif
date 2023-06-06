@@ -58,16 +58,16 @@ module i2c_master (
     assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
-    always_ff @(posedge clk) begin
+    always_comb begin
         if (reset == 1) begin
-            i2c_scl_enable <= 0;
+            i2c_scl_enable = 0;
         end
         else begin
             if((current == STATE_IDLE) || (current == STATE_START) || (current == STATE_STOP)) begin
-                i2c_scl_enable <= 0;
+                i2c_scl_enable = 0;
             end
             else begin
-                i2c_scl_enable <= 1;
+                i2c_scl_enable = 1;
             end    
         end
     end
