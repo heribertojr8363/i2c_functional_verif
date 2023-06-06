@@ -10,7 +10,7 @@ module tb;
     logic [6:0] addr_in;
     logic [7:0] data_in;
 
-    logic i2c_sda;
+    wire i2c_sda;
     logic i2c_slc;
     //logic fifo_full;
 
