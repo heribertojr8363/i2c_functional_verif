@@ -215,43 +215,43 @@ module i2c_master (
             STATE_DATA: begin
                 //sda_enable = 1;
 
-                if(io) sda = saved_wdata[count];
-                else sda = sda;
+                if(io) i2c_sda = saved_wdata[count];
+                else i2c_sda = i2c_sda;
 
-                if(!io)    r_data[count] = sda;
-                else       sda = sda;
+                if(!io)    r_data[count] = i2c_sda;
+                else       i2c_sda = i2c_sda;
                     
             end
 
             STATE_ACK2: begin
-                //sda_enable = 1;
+                //i2c_sda_enable = 1;
                 if(!io) begin
-                    ack_data = sda;
+                    ack_data = i2c_sda;
                     if(!ack_data) begin
                         if(stop) begin
-                            sda = 0;
+                            i2c_sda = 0;
                         end
-                        else sda = sda;
+                        else i2c_sda = i2c_sda;
                     end 
                     else begin
-                        sda = 0;
+                        i2c_sda = 0;
                     end
                 end
 
                 else begin
-                    sda = sda;
+                    i2c_sda = i2c_sda;
                 end
 
             end
 
             STATE_STOP: begin
-                //sda_enable = 1;
-                if(io)   sda = 1;
-                else     sda = sda;
+                //i2c_sda_enable = 1;
+                if(io)   i2c_sda = 1;
+                else     i2c_sda = i2c_sda;
                 
              end
 
-            default: sda = 0;
+            default: i2c_sda = 0;
         endcase
         
     end
