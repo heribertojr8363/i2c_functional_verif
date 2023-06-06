@@ -122,8 +122,6 @@ module i2c_master (
                 end
 
                 STATE_DATA: begin
-                    if(!rw)  //io = 1;
-                    else //io = 0;
                     
                     if(count == 0) begin
                         next <= STATE_ACK2;
@@ -220,7 +218,9 @@ module i2c_master (
             end
 
             STATE_DATA: begin
-                io = 1;
+                if(!rw)  io = 1;
+                else     io = 0;
+                
                 sda_enable = 1;
 
                 if(io) sda = saved_wdata[count];
