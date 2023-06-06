@@ -100,7 +100,6 @@ module i2c_master (
                     end
 
                     else begin
-                        @(negedge i2c_scl);
                         count <= count - 1;
                     end
                     
@@ -131,7 +130,6 @@ module i2c_master (
                     end
 
                     else begin
-                        @(negedge i2c_scl);
                         count <= count - 1;
                     end
                     
