@@ -83,12 +83,12 @@ module tb;
         stop_in = 'h0;
         rw_in = 'h1;
         addr_in = 7'h55;
-        data_in = 8'h01;
+        //data_in = 8'h01;
 
-        /*for (int i = 7; i < 0; i--) begin
+        for (int i = 7; i < 0; i--) begin
             #5;
             i2c_sda <= data_in[i];
-        end*/
+        end
 
         #300;
 
