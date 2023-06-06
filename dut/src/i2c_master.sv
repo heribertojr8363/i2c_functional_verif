@@ -58,7 +58,7 @@ module i2c_master (
     assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
-    always_ff @(negedge clk) begin
+    always_ff @(posedge clk) begin
         if (reset == 1) begin
             i2c_scl_enable <= 0;
         end
@@ -122,7 +122,6 @@ module i2c_master (
                 end
 
                 STATE_DATA: begin
-                    
                     if(count == 0) begin
                         next <= STATE_ACK2;
                     end
@@ -220,7 +219,7 @@ module i2c_master (
             STATE_DATA: begin
                 if(!rw)  io = 1;
                 else     io = 0;
-                
+
                 sda_enable = 1;
 
                 if(io) sda = saved_wdata[count];
