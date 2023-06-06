@@ -47,16 +47,15 @@ module i2c_master (
     logic ack_data;
     logic [7:0] saved_wdata;
 
-    //logic sda_enable;
-    //logic sda;
 
     // criar variavel io para definir a direção de i2c_sda
     logic io;   // in (io = 0); out (io = 1);
-
+    logic sda;
+    logic sda_enable;
 
     assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
 
-    //assign i2c_sda = (sda_enable) ? sda : 'bz;
+    assign i2c_sda = (sda_enable) ? sda : 'bz;
 
 
     always_ff @(negedge clk) begin
@@ -142,101 +141,101 @@ module i2c_master (
     always_comb begin
         case (current)
             STATE_IDLE: begin
-                //sda_enable = 1;
-                if(io)  i2c_sda = 1;
-                else    i2c_sda = i2c_sda;
+                sda_enable = 1;
+                if(io)  sda = 1;
+                else    sda = sda;
 
                 if(start) begin
                     saved_addr = addr;
                     saved_wdata = w_data;
                 end
 
-                else i2c_sda = i2c_sda;
+                else sda = sda;
 
             end
 
             STATE_START: begin
-                //i2c_sda_enable = 1;
-                if(io) i2c_sda = 0;
-                else   i2c_sda = i2c_sda;
+                sda_enable = 1;
+                if(io) sda = 0;
+                else   sda = sda;
                     
             end
 
             STATE_ADDR: begin
-                //i2c_sda_enable = 1;
-                if(io) i2c_sda = saved_addr[count];
-                else   i2c_sda = i2c_sda;
+                sda_enable = 1;
+                if(io) sda = saved_addr[count];
+                else   sda = sda;
                     
             end
 
             STATE_RW: begin
-                //i2c_sda_enable = 1;
-                if(io) i2c_sda = rw;
-                else   i2c_sda = i2c_sda;
+                sda_enable = 1;
+                if(io) sda = rw;
+                else   sda = sda;
                     
             end
 
             STATE_ACK: begin
-                //i2c_sda_enable = 1;
+                sda_enable = 1;
                 if(!io) begin
-                    ack_addr = i2c_sda;
+                    ack_addr = sda;
                     if(!ack_addr) begin
-                        i2c_sda = i2c_sda;
+                        sda = sda;
                     end
                     else begin
-                        i2c_sda = 0;
+                        sda = 0;
                     end
                 end
 
                 else begin
-                    i2c_sda = i2c_sda;
+                    sda = sda;
                 end
                     
             end
 
             STATE_DATA: begin
-                //i2c_sda_enable = 1;
+                sda_enable = 1;
                 if(!rw) begin
-                    if(io) i2c_sda = saved_wdata[count];
-                    else i2c_sda = i2c_sda;
+                    if(io) sda = saved_wdata[count];
+                    else sda = sda;
                 end
 
                 else begin
-                    if(!io)    r_data[count] = i2c_sda;
-                    else       i2c_sda = i2c_sda;
+                    if(!io)    r_data[count] = sda;
+                    else       sda = sda;
                 end
                     
             end
 
             STATE_ACK2: begin
-                //i2c_sda_enable = 1;
+                sda_enable = 1;
                 if(!io) begin
-                    ack_data = i2c_sda;
+                    ack_data = sda;
                     if(!ack_data) begin
                         if(stop) begin
-                            i2c_sda = 0;
+                            sda = 0;
                         end
-                        else i2c_sda = i2c_sda;
+                        else sda = sda;
                     end 
                     else begin
-                        i2c_sda = 0;
+                        sda = 0;
                     end
                 end
 
                 else begin
-                    i2c_sda = i2c_sda;
+                    sda = sda;
                 end
 
             end
 
             STATE_STOP: begin
-                //i2c_sda_enable = 1;
-                if(io)   i2c_sda = 1;
-                else     i2c_sda = i2c_sda;
+                sda_enable = 1;
+                if(io)   sda = 1;
+                else     sda = sda;
                 
              end
 
-            default: i2c_sda = 0;
+            default: sda = 0;
         endcase
         
     end
