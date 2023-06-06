@@ -87,7 +87,7 @@ module tb;
 
         for (int i = 7; i < 0; i--) begin
             #5;
-            i2c_sda <= data_in[i];
+            i2c_sda = data_in[i];
         end
 
         #300;
