@@ -104,8 +104,7 @@ module i2c_master (
 
                 STATE_RW: begin
                     next <= STATE_ACK;
-                    if(!rw)  io <= 1;
-                    else     io <= 0;
+                    io <= 1;
                     
                 end
 
@@ -113,19 +112,21 @@ module i2c_master (
                     if(!ack_addr) begin
                         next <= STATE_DATA;
                         count <= 7;
-                        io <= 1;
+                        io <= 0;
                     end
                     else begin
                         next <= STATE_STOP;
-                        io <= 1;
+                        io <= 0;
                     end
                     
                 end
 
                 STATE_DATA: begin
+                    if(!rw)  io = 1;
+                    else io = 0;
+                    
                     if(count == 0) begin
                         next <= STATE_ACK2;
-                        io <= 0;
                     end
 
                     else count <= count - 1;
@@ -136,15 +137,15 @@ module i2c_master (
                     if(!ack_data) begin
                         if(stop) begin
                             next <= STATE_STOP;
-                            io <= 1;
+                            io <= 0;
                         end
                         else begin
                             next <= STATE_DATA;
-                            io <= 1;
+                            io <= 0;
                         end
                     end 
                     else begin
-                        io <= 1;
+                        io <= 0;
                         next <= STATE_STOP;
                     end
 
@@ -152,6 +153,7 @@ module i2c_master (
 
                 STATE_STOP: begin
                     next <= STATE_IDLE;
+                    io <= 1;
                 
                 end
             endcase
@@ -216,10 +218,7 @@ module i2c_master (
                 sda_enable = 1;
 
                 if(io) sda = saved_wdata[count];
-                else sda = sda;
-
-                if(!io)    r_data[count] = sda;
-                else       sda = sda;
+                else r_data[count] = sda;
                     
             end
 
