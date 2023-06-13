@@ -6,7 +6,8 @@ BENCH_DIR = $(I2C_DIR)/tb
 XCELIUM_FLAGS = -access rwc \
 	+incdir+$(BENCH_DIR) \
 	+incdir+$(I2C_DIR)/src\
-	-input shm.tcl
+	-input shm.tcl \
+        -default_port_array_wire
 
 # Arquivos fonte
 RTL_FILES = $(I2C_DIR)/src/i2c_master.sv

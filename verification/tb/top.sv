@@ -1,20 +1,25 @@
 module top;
 
     import uvm_pkg::*;
-    import i2c_vip_pkg::*;
+    import i2c_pkg::*;
     import top_pkg::*;
 
     logic clk;
+    logic reset;
 
-    i2c_vip_interface i2c_if(.clk(clk));
+     initial begin
+      clk = 1;
+      reset = 0;
+      #20 reset = 1;
+      #20 reset = 0;
+    end
 
-    always #1 clk = !clk;
+    i2c_interface i2c_if(.clk(clk), .reset(reset));
+
+    always #10 clk = !clk;
 
     initial begin
-        clk = 0;
-
-        uvm_config_db#(virtual i2c_vip_interface)::set(uvm_root::get(), "*", "i2c_vip_vif", i2c_if);
-
+        uvm_config_db#(virtual i2c_interface)::set(uvm_root::get(), "*", "vif", i2c_if);
         run_test("my_test");
     end
 endmodule

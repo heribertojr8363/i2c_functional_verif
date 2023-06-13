@@ -1,7 +1,7 @@
 class my_test extends uvm_test;
     `uvm_component_utils(my_test)
 
-    my_sequence seq;
+    i2c_sequence seq;
     my_env env;
     int cycles = 10000;
 
@@ -11,7 +11,7 @@ class my_test extends uvm_test;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        seq = my_sequence::type_id::create("seq", this);
+        seq = i2c_sequence::type_id::create("seq", this);
         env = my_env::type_id::create("env", this);
     endfunction
 

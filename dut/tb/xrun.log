@@ -1,0 +1,23 @@
+xrun(64): 20.09-s010: (c) Copyright 1995-2021 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	20.09-s010: Started on Jun 12, 2023 at 20:52:36 -03
+xrun
+	-sv
+	-access rwc
+	+incdir+../tb
+	+incdir+../src
+	-input shm.tcl
+	-default_port_array_wire
+	../src/i2c_master.sv
+	../tb/i2c_tb.sv
+Loading snapshot worklib.tb:sv .................... Done
+xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+xcelium> source /usr/local/cds/XCELIUM2009/tools/xcelium/files/xmsimrc
+xcelium> database -open waves -shm
+Created SHM database waves
+xcelium> probe -create tb -depth all -all -memories -shm -database waves
+Created probe 1
+xcelium> run 18 ms -absolute
+Simulation complete via $finish(1) at time 370 NS + 0
+./i2c_tb.sv:102         $finish();
+xcelium> exit
+TOOL:	xrun(64)	20.09-s010: Exiting on Jun 12, 2023 at 20:52:38 -03  (total: 00:00:02)

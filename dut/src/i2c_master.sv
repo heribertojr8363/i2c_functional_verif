@@ -94,12 +94,12 @@ module i2c_master (
                 end
 
                 STATE_ADDR: begin
-                    if(count == 0) begin
+                    if(count == 1) begin
                         next <= STATE_RW;
                         //io <= 1;
                     end
 
-                    else begin
+                    if(count != 0) begin
                         count <= count - 1;
                     end
                     
@@ -125,11 +125,11 @@ module i2c_master (
                 end
 
                 STATE_DATA: begin
-                    if(count == 0) begin
+                    if(count == 1) begin
                         next <= STATE_ACK2;
                     end
 
-                    else begin
+                    if(count != 0) begin
                         count <= count - 1;
                     end
                     
@@ -137,17 +137,12 @@ module i2c_master (
 
                 STATE_ACK2: begin
                     if(!ack_data) begin
-                        if(stop) begin
-                            next <= STATE_STOP;
-                            //io <= 0;
-                        end
-                        else begin
-                            next <= STATE_DATA;
-                            //io <= 0;
-                        end
+                        next <= STATE_STOP;
+                        //io <= 0;
                     end 
                     else begin
                         //io <= 0;
+                        //Criar variável de nack
                         next <= STATE_STOP;
                     end
 
@@ -208,6 +203,7 @@ module i2c_master (
                 if(!io) begin
                     ack_addr = sda;
                     if(!ack_addr) begin
+                        //Criar variavel de nack
                         sda = sda;
                     end
                     else begin
@@ -238,12 +234,10 @@ module i2c_master (
                 if(!io) begin
                     ack_data = sda;
                     if(!ack_data) begin
-                        if(stop) begin
-                            sda = 0;
-                        end
-                        else sda = sda;
+                        sda = 0;
                     end 
                     else begin
+                        //Criar variável de NACK
                         sda = 0;
                     end
                 end

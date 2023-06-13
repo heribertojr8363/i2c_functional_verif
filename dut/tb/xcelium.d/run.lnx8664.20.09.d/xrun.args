@@ -1,0 +1,14 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-sv
+-access
+rwc
++incdir+../tb
++incdir+../src
+-input
+shm.tcl
+-default_port_array_wire
+../src/i2c_master.sv
+../tb/i2c_tb.sv

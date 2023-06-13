@@ -1,0 +1,18 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-INCDIR
+../tb
+-INCDIR
+../src
+-INCDIR
+../script
+-DEFINE
+ALL
+-I_INCDIR
+/usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d/sv/src
+-DEFINE
+USE_PARAMETERIZED_WRAPPER
+-I_INCDIR
+/usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d/additions/sv

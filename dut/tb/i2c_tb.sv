@@ -55,12 +55,6 @@ module tb;
             clk = #5 ~clk;
         end
     end
-
-    always_ff @( posedge go ) begin
-        for (int i = 7; i < 0; i--) begin
-            i2c_sda = data_in[i];
-        end
-    end
     
     initial begin
         reset = 1;
@@ -77,7 +71,6 @@ module tb;
         rw_in = 'h0;
         addr_in = 7'h55;
         data_in = 8'haa;
-        go = 0;
 
         #300;
 
@@ -86,17 +79,12 @@ module tb;
         #50;
         
 
-        @(negedge clk);
+        /*@(negedge clk);
         start_in = 'h1;
-        #10;
         stop_in = 'h0;
-        #10;
         rw_in = 'h1;
-        #10;
         addr_in = 7'h55;
-        #10;
         data_in = 8'h01;
-        go = 1;
 
         #300;
 
@@ -104,7 +92,7 @@ module tb;
 
         #50;
 
-        /*@(negedge clk);
+        @(negedge clk);
         start = 'h1;
         addr_in = 7'h55;
         data_in = 8'hd3;

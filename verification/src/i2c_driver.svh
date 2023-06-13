@@ -16,14 +16,14 @@
  *  cfg.clk_divider: Sets SCL clock period based on interface clock (DEFAULT=2)
  *
  */
-class i2c_driver #(parameter ADDR_WIDTH=7, parameter DATA_WIDTH=8) extends uvm_driver #(i2c_sequence_item);
-	`uvm_component_utils(i2c_driver #(.ADDR_WIDTH(7),.DATA_WIDTH(8)))
+class i2c_driver extends uvm_driver #(i2c_sequence_item);
+	`uvm_component_utils(i2c_driver)
 
 	virtual i2c_interface vif;
 	i2c_agent_config cfg;
-	i2c_sequence_item #(.ADDR_WIDTH(7), .DATA_WIDTH(8)) tr;
-	bit stop_scl;
-	bit ack;
+	i2c_sequence_item tr;
+	//bit stop_scl;
+	rand bit ack_addr, ack_data, rw_logic;
 
 	function new(string name = "i2c_driver", uvm_component parent = null);
 			super.new(name, parent);
@@ -36,98 +36,89 @@ class i2c_driver #(parameter ADDR_WIDTH=7, parameter DATA_WIDTH=8) extends uvm_d
 			end
 	endfunction : build_phase
 
-	task run_phase (uvm_phase phase);
-		@(posedge vif.rst);
-		vif.scl <= 1;
-		vif.sda <= 1;
+	task reset_phase(uvm_phase phase);
+    	phase.raise_objection(this);
+    	@(posedge vif.reset);
 
+    	//Reset write data channel   
+    	vif.start  <= '0;  
+    	vif.stop   <= '0;
+    	vif.rw   <= '0;
+		vif.addr <= '0;
+		vif.w_data <= '0; 
+
+    	//tr = null;
+    	@(negedge vif.reset);
+    	phase.drop_objection(this);
+  	endtask : reset_phase
+
+	task main_phase (uvm_phase phase);
 		forever begin
-			repeat (cfg.initial_delay_clock) @(posedge vif.clk);
+			//repeat (cfg.initial_delay_clock) @(posedge vif.clk);
 			seq_item_port.get_next_item(tr);
 
 			send_start();
-			if (tr.read) begin
-				fork
-					scl_gen();
-					begin
-						send_addr();
-						get_acknowledge();
-					end
-				join
-				if(ack) begin
-					repeat (cfg.byte_number) begin
-						fork
-							scl_gen();
-							set_acknowledge();
-						join
-					end
-				end else send_stop();
-			end
-			else begin
-				fork
-					scl_gen();
-					begin
-						send_addr();
-						get_acknowledge();
-					end
-				join
-				if(ack) begin
-					repeat (cfg.byte_number) begin
-						fork
-							scl_gen();
-							begin
-								send_data();
-								get_acknowledge();
-							end
-						join
-							if(!ack) break;
-					end
-				end else send_stop();
-			end
-			send_stop();
+			if(!vif.i2c_sda) @(negedge vif.i2c_sda);
+			fork
+				send_addr();
+				send_rw();
+				set_addr_acknowledge();
+			join
+				
+			@(negedge vif.i2c_scl);
+	
+			fork
+				send_data();
+				set_data_acknowledge();
+			join
+
+			seq_item_port.item_done();
 		end
   endtask
 
-	task send_start();
-		vif.sda <=0;
-		repeat (cfg.start_condition_post_delay) @(posedge vif.clk);
+	virtual task send_start();
+		@(posedge vif.clk);
+		vif.start <= 1;
 	endtask
 
-	task send_addr();
+	virtual task send_addr();
 		foreach (tr.addr[i]) begin
-			@(posedge vif.scl);
-			vif.sda <= tr.addr[ADDR_WIDTH-i];
-			@(posedge vif.scl);
-			vif.sda <= tr.read;
+			@(negedge vif.i2c_scl);
+			vif.addr[6-i] <= tr.addr[6-i];
 		end
 	endtask
 
-	task send_data();
-		foreach (tr.data[i])begin
-			@(posedge vif.scl);
-			vif.sda <= tr.data[DATA_WIDTH-i];
+	virtual task send_data();
+		foreach (tr.w_data[i])begin
+			@(negedge vif.i2c_scl);
+			vif.w_data[7-i] <= tr.w_data[7-i];
 		end
 	endtask
 
-	task get_acknowledge();
-		@(posedge vif.scl)
-		ack  = (vif.sda)? 0:1;
+	virtual task send_rw();
+		repeat(8) @(negedge vif.i2c_scl);
+		vif.rw <= rw_logic;
 	endtask
 
-	task set_acknowledge();
-		repeat(9) @(posedge vif.scl);
-		vif.sda <= 1;
+	virtual task set_addr_acknowledge();
+		repeat(10) @(negedge vif.i2c_scl);
+		vif.i2c_sda <= ack_addr;
 	endtask
 
-	task scl_gen();
+	virtual task set_data_acknowledge();
+		repeat(9) @(negedge vif.i2c_scl);
+		vif.i2c_sda <= ack_data;
+	endtask
+
+	/*task scl_gen();
 		repeat(9) begin
 			repeat(cfg.clk_divider) @(posedge vif.clk) vif.scl = ~vif.scl;
 		end
-	endtask
+	endtask*/
 
-	task send_stop();
-		vif.sda <=1;
-		vif.scl <=1;
+	virtual task send_stop();
+		@(posedge vif.clk);
+		vif.stop <=1;
 	endtask
 
 

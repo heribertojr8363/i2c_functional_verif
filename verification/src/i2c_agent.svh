@@ -8,7 +8,7 @@ class i2c_agent extends uvm_agent;
      sequencer  sqr;
      i2c_agent_config cfg;
      // i2c_monitor               mon;
-     i2c_driver #(.ADDR_WIDTH(7), .DATA_WIDTH(8)) drv;
+     i2c_driver drv;
 
     function new(string name = "i2c_agent", uvm_component parent = null);
         super.new(name, parent);
@@ -19,7 +19,7 @@ class i2c_agent extends uvm_agent;
 
         if(cfg.is_active == UVM_ACTIVE) begin
             sqr = sequencer::type_id::create("sqr",this);
-            drv = i2c_driver #(.ADDR_WIDTH(7), .DATA_WIDTH(8))::type_id::create("drv",this);
+            drv = i2c_driver::type_id::create("drv",this);
             drv.cfg = this.cfg;
         end
 

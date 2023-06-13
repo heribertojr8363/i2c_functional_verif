@@ -1,0 +1,13 @@
+//
+// File created by:  xrun
+// Do not modify this file
+
+s1::(12Jun2023:21:23:20):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s2::(12Jun2023:21:33:47):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s3::(12Jun2023:21:34:48):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s4::(12Jun2023:21:37:43):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s5::(12Jun2023:21:38:45):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s6::(12Jun2023:21:39:10):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s7::(12Jun2023:21:39:36):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s8::(12Jun2023:21:40:08):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
+s9::(12Jun2023:21:40:26):( xrun -64bit -uvm +incdir+../tb +incdir+../src +incdir+../script ../src/i2c_pkg.svh ../tb/top_pkg.sv ../src/i2c_interface.sv ../tb/top.sv +UVM_TESTNAME=my_test -covtest my_test-100 -define ALL -svseed 100 )
