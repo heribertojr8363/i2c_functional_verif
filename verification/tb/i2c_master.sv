@@ -102,16 +102,11 @@ module i2c_master (i2c_interface.master vif);
                 end
 
                 STATE_ACK: begin
-                    if(ack_addr) begin // ack tem que ser 1
-                        if(!vif.rw) next <= STATE_WDATA;
-                        else next <= STATE_RDATA;
-                        count <= 7;
-                        //io <= 0;
-                    end
-                    else begin
-                        next <= STATE_ADDR;
-                        //io <= 0;
-                    end
+                    
+                     if(!vif.rw) next <= STATE_WDATA;
+                     else next <= STATE_RDATA;
+                     count <= 7;
+                     //io <= 0;
                     
                 end
 
@@ -137,16 +132,8 @@ module i2c_master (i2c_interface.master vif);
                 end
 
                 STATE_ACK_WDATA: begin
-                    if(!ack_data) begin
 			if(vif.stop) next <= STATE_STOP;
                         //io <= 0;
-                    end 
-                    else begin
-                        //io <= 0;
-                        //Criar variável de nack
-                        next <= STATE_WDATA;
-                    end
-
                 end
 
                 STATE_ACK_RDATA: begin

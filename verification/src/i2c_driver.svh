@@ -55,7 +55,7 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 		forever begin
 			//repeat (cfg.initial_delay_clock) @(posedge vif.clk);
 			seq_item_port.get_next_item(tr);
-
+			//repeat(4) @(posedge vif.clk);
 			drive_start();
 			if(!vif.i2c_sda) @(negedge vif.i2c_sda);
 
@@ -76,14 +76,15 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 				//@(negedge vif.i2c_scl);
 			end
 			else begin
+				@(negedge vif.i2c_scl);
 				//drive_read_data();
-				repeat(9) @(negedge vif.i2c_scl);
+				repeat(10) @(negedge vif.i2c_scl);
 			end
-
-			@(negedge vif.i2c_scl);
+			
+			//repeat(3) @(posedge vif.clk);
 
 			drive_stop();
-			if(vif.i2c_sda) @(posedge vif.i2c_sda);
+			//if(vif.i2c_sda) @(posedge vif.i2c_sda);
 
 			seq_item_port.item_done();
 		end
@@ -126,11 +127,13 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 	virtual task drive_addr_acknowledge();
 		repeat(9) @(negedge vif.i2c_scl);
 		vif.i2c_sda <= 1;
+		$display("DRIVER: ADDR_ACK STATE");
 	endtask
 
 	virtual task drive_data_acknowledge();
 		repeat(10) @(negedge vif.i2c_scl);
 		vif.i2c_sda <= 0;
+		$display("DRIVER: DATA_ACK STATE");
 	endtask
 
 	virtual task drive_stop();

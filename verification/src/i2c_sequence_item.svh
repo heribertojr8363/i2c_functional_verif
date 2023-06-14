@@ -4,6 +4,7 @@ class i2c_sequence_item  extends uvm_sequence_item;
   bit stop;
   rand logic [6:0] addr;
   rand logic [7:0] w_data;
+  logic [7:0] recovery_w_data;
   logic [7:0] r_data;
   bit ack_addr;
   bit ack_data;
@@ -20,6 +21,7 @@ class i2c_sequence_item  extends uvm_sequence_item;
     `uvm_field_int(stop, UVM_ALL_ON)
     `uvm_field_int(addr, UVM_ALL_ON)
     `uvm_field_int(w_data, UVM_ALL_ON)
+    `uvm_field_int(recovery_w_data, UVM_ALL_ON)
     `uvm_field_int(r_data, UVM_ALL_ON)
     `uvm_field_int(ack_addr, UVM_ALL_ON)
     `uvm_field_int(ack_data, UVM_ALL_ON)
@@ -33,6 +35,7 @@ class i2c_sequence_item  extends uvm_sequence_item;
     printer.print_field("stop", stop, $bits(stop), UVM_DEC);
     printer.print_field("addr", addr, $bits(addr), UVM_BIN);
     printer.print_field("w_data", w_data, $bits(w_data), UVM_BIN);
+    printer.print_field("recovery_w_data", recovery_w_data, $bits(w_data), UVM_BIN);
     printer.print_field("r_data", r_data, $bits(r_data), UVM_BIN);
     printer.print_field("ack_addr", ack_addr, $bits(ack_addr), UVM_BIN);
     printer.print_field("ack_data", ack_data, $bits(ack_data), UVM_BIN);
