@@ -20,3 +20,6 @@ ALL
 -svseed
 100
 -ALLOWREDEFINITION
+-cov_cgsample
+-coverage
+u
