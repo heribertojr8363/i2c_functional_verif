@@ -1,3 +1,7 @@
+/*class write_op extends i2c_sequence_item;
+  
+endclass*/
+
 class i2c_sequence extends uvm_sequence #(i2c_sequence_item);    
   `uvm_object_utils(i2c_sequence)
 
@@ -8,7 +12,7 @@ class i2c_sequence extends uvm_sequence #(i2c_sequence_item);
   endfunction: new
 
   task body;
-    forever begin
+    repeat(200) begin
       tr = i2c_sequence_item::type_id::create("tr");
       start_item(tr);
       assert(tr.randomize());

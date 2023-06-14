@@ -2,5 +2,4 @@
 // File created by:  xrun
 // Do not modify this file
 
-s1::(12Jun2023:19:55:42):( xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl -default_port_array_wire ../src/i2c_master.sv ../tb/i2c_tb.sv )
-s2::(12Jun2023:20:52:36):( xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl -default_port_array_wire ../src/i2c_master.sv ../tb/i2c_tb.sv )
+s1::(13Jun2023:19:36:43):( xrun -sv -access rwc +incdir+../tb +incdir+../src -input shm.tcl -default_port_array_wire -ALLOWREDEFINITION ../src/i2c_master.sv ../tb/i2c_tb.sv )

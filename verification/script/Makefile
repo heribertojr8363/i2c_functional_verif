@@ -14,8 +14,9 @@ SCRIPT_SRC = ../scripts
 VSRC = ../src
 VTB = ../tb
 VSCRIPT = ../script
+DUT = ../../dut
 
-IF = $(VSRC)/i2c_interface.sv
+IF = $(VSRC)/i2c_interface.svh
 #PKGS_TYPES = $(VSRC)/axi4_lite_vip_defs.svh
 PKGS_VIP = $(VSRC)/i2c_pkg.svh
 PKGS = $(VTB)/top_pkg.sv
@@ -27,8 +28,8 @@ COVER = 100
 TRANSA = 5000
 
 run:
-	@xrun -64bit -uvm +incdir+$(VTB) +incdir+$(VSRC) +incdir+$(VSCRIPT) $(PKGS_VIP) $(PKGS) $(IF) $(VTB)/top.sv \
-    +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) 
+	@xrun -64bit -uvm +incdir+$(VTB) +incdir+$(VSRC) +incdir+$(DUT) +incdir+$(VSCRIPT) $(PKGS_VIP) $(PKGS) $(IF) $(VTB)/top.sv \
+    +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) -ALLOWREDEFINITION
 
 clean:
 	@rm -rf INCA_libs waves.shm rtlsim/* *.history *.log rtlsim/* *.key mdv.log imc.log imc.key ncvlog_*.err *.trn *.dsn .simvision/ xcelium.d simv.daidir *.so *.o *.err cov_work simvision* *.out
@@ -36,8 +37,8 @@ clean:
 rebuild: clean sim
 
 gui:
-	@xrun -64bit -uvm +incdir+$(VTB) +incdir+$(VSRC) +incdir+$(VSCRIPT) $(PKGS_TYPES) $(PKGS_VIP) $(PKGS) $(IF) $(VTB)/axi4_lite_top.svh \
-    +UVM_TESTNAME=axi4_lite_test -covtest axi4_lite_test-$(SEED) -define $(MODE) -svseed $(SEED) -gui 
+	@xrun -64bit -uvm +incdir+$(VTB) +incdir+$(VSRC) +incdir+$(VSCRIPT) $(PKGS_TYPES) $(PKGS_VIP) $(PKGS) $(IF) $(VTB)/top.sv \
+    +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) -gui -ALLOWREDEFINITION -access +rwc
 
 cover:
 	imc &

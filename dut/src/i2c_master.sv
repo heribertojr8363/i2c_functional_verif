@@ -1,37 +1,28 @@
+//`include "uvm_macros.svh"
+//`include "i2c_pkg.svh"
+`include "../../verification/src/i2c_interface.svh"
 `timescale 1ns/1ps
 
-module i2c_master (
-    //Inputs coming from master device logic
-    input logic       clk,
-    input logic       reset,
-    input logic       start,
-    input logic       stop,
-    input logic       rw,
-    input logic [6:0] addr,
-    input logic [7:0] w_data,
+module i2c_master (i2c_interface.master vif);
 
-    //Outputs
-    output  logic     i2c_scl,
-    inout   logic     i2c_sda
-    
-);
-
-    typedef enum logic [2:0] 
+    typedef enum logic [3:0] 
     {
         STATE_IDLE,     //00
         STATE_START,    //01
         STATE_ADDR,     //02
         STATE_RW,       //03
         STATE_ACK,      //04
-        STATE_DATA,     //05
-        STATE_ACK2,     //06
+        STATE_WDATA,    //05
+        STATE_RDATA,
+        STATE_ACK_WDATA,//06
+        STATE_ACK_RDATA,
         STATE_STOP      //07
     } state;
 
     state current, next;
 
-    always_ff @(posedge clk or posedge reset) begin
-        if(reset) begin
+    always_ff @(posedge vif.clk or posedge vif.reset) begin
+        if(vif.reset) begin
             current <= STATE_IDLE;
         end else begin
             current <= next;
@@ -53,13 +44,13 @@ module i2c_master (
     logic sda;
     logic sda_enable;
 
-    assign i2c_scl = (i2c_scl_enable == 0) ? 1 : ~clk;
+    assign vif.i2c_scl = (i2c_scl_enable == 0) ? 1 : ~vif.clk;
 
-    assign i2c_sda = (sda_enable) ? sda : 'bz;
+    assign vif.i2c_sda = (sda_enable) ? sda : 'bz;
 
 
     always_comb begin
-        if (reset == 1) begin
+        if (vif.reset == 1) begin
             i2c_scl_enable = 0;
         end
         else begin
@@ -73,11 +64,11 @@ module i2c_master (
     end
     
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge vif.clk) begin
             case (current)
                 
                 STATE_IDLE: begin
-                    if(start) begin
+                    if(vif.start) begin
                         next <= STATE_START;
                         //io <= 1;
                     end
@@ -112,21 +103,22 @@ module i2c_master (
                 end
 
                 STATE_ACK: begin
-                    if(!ack_addr) begin
-                        next <= STATE_DATA;
+                    if(!ack_addr) begin // ack tem que ser 1
+                        if(!vif.rw) next <= STATE_WDATA;
+                        else next <= STATE_RDATA;
                         count <= 7;
                         //io <= 0;
                     end
                     else begin
-                        next <= STATE_STOP;
+                        next <= STATE_ADDR;
                         //io <= 0;
                     end
                     
                 end
 
-                STATE_DATA: begin
+                STATE_WDATA: begin
                     if(count == 1) begin
-                        next <= STATE_ACK2;
+                        next <= STATE_ACK_WDATA;
                     end
 
                     if(count != 0) begin
@@ -135,7 +127,17 @@ module i2c_master (
                     
                 end
 
-                STATE_ACK2: begin
+                STATE_RDATA: begin
+                    if(count == 1) begin
+                        next <= STATE_ACK_RDATA;
+                    end
+
+                    if(count != 0) begin
+                        count <= count - 1;
+                    end
+                end
+
+                STATE_ACK_WDATA: begin
                     if(!ack_data) begin
                         next <= STATE_STOP;
                         //io <= 0;
@@ -143,9 +145,13 @@ module i2c_master (
                     else begin
                         //io <= 0;
                         //Criar variável de nack
-                        next <= STATE_STOP;
+                        next <= STATE_WDATA;
                     end
 
+                end
+
+                STATE_ACK_RDATA: begin
+                    next <= STATE_STOP;
                 end
 
                 STATE_STOP: begin
@@ -164,9 +170,9 @@ module i2c_master (
                 if(io)  sda = 1;
                 else    sda = sda;
 
-                if(start) begin
-                    saved_addr = addr;
-                    saved_wdata = w_data;
+                if(vif.start) begin
+                    saved_addr = vif.addr;
+                    saved_wdata = vif.w_data;
                 end
 
                 else sda = sda;
@@ -192,7 +198,7 @@ module i2c_master (
             STATE_RW: begin
                 io = 1;
                 sda_enable = 1;
-                if(io) sda = rw;
+                if(io) sda = vif.rw;
                 else   sda = sda;
                     
             end
@@ -202,13 +208,6 @@ module i2c_master (
                 sda_enable = 1;
                 if(!io) begin
                     ack_addr = sda;
-                    if(!ack_addr) begin
-                        //Criar variavel de nack
-                        sda = sda;
-                    end
-                    else begin
-                        sda = 0;
-                    end
                 end
 
                 else begin
@@ -217,35 +216,42 @@ module i2c_master (
                     
             end
 
-            STATE_DATA: begin
-                if(!rw)  io = 1;
-                else     io = 0;
-
+            STATE_WDATA: begin
+                io = 1;
                 sda_enable = 1;
 
                 if(io) sda = saved_wdata[count];
-                else r_data[count] = sda;
+                else sda = sda;
                     
             end
 
-            STATE_ACK2: begin
+            STATE_RDATA: begin
+                io = 0;
+                sda_enable = 1;
+
+                if(!io) r_data[count] = sda;
+                else sda = sda;
+            end
+
+            STATE_ACK_WDATA: begin
                 io = 0;
                 sda_enable = 1;
                 if(!io) begin
                     ack_data = sda;
-                    if(!ack_data) begin
-                        sda = 0;
-                    end 
-                    else begin
-                        //Criar variável de NACK
-                        sda = 0;
-                    end
                 end
 
                 else begin
                     sda = sda;
                 end
 
+            end
+
+            STATE_ACK_RDATA: begin
+                io = 1;
+                sda_enable = 1;
+
+                if(io) sda <= 1;
+                else sda <= sda;
             end
 
             STATE_STOP: begin

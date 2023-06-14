@@ -20,10 +20,9 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 	`uvm_component_utils(i2c_driver)
 
 	virtual i2c_interface vif;
-	i2c_agent_config cfg;
+	//i2c_agent_config cfg;
 	i2c_sequence_item tr;
 	//bit stop_scl;
-	rand bit ack_addr, ack_data, rw_logic;
 
 	function new(string name = "i2c_driver", uvm_component parent = null);
 			super.new(name, parent);
@@ -31,7 +30,7 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 
 	virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
-			if(!uvm_config_db#(virtual i2c_interface)::get(this, "", "i2c_vif", vif)) begin
+			if(!uvm_config_db#(virtual i2c_interface)::get(this, "", "vif", vif)) begin
 			`uvm_fatal("NOVIF", "failed to get virtual interface")
 			end
 	endfunction : build_phase
@@ -43,7 +42,7 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
     	//Reset write data channel   
     	vif.start  <= '0;  
     	vif.stop   <= '0;
-    	vif.rw   <= '0;
+    	vif.rw   <= '1;
 		vif.addr <= '0;
 		vif.w_data <= '0; 
 
@@ -57,68 +56,86 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 			//repeat (cfg.initial_delay_clock) @(posedge vif.clk);
 			seq_item_port.get_next_item(tr);
 
-			send_start();
+			drive_start();
 			if(!vif.i2c_sda) @(negedge vif.i2c_sda);
+
 			fork
-				send_addr();
-				send_rw();
-				set_addr_acknowledge();
+				drive_addr();
+				drive_rw();
+				drive_addr_acknowledge();
 			join
-				
+
+			//@(negedge vif.i2c_scl);
+
+			if(!vif.rw) begin
+				@(negedge vif.i2c_scl);
+
+				drive_write_data();
+				drive_data_acknowledge();
+
+				//@(negedge vif.i2c_scl);
+			end
+			else begin
+				//drive_read_data();
+				repeat(9) @(negedge vif.i2c_scl);
+			end
+
 			@(negedge vif.i2c_scl);
-	
-			fork
-				send_data();
-				set_data_acknowledge();
-			join
+
+			drive_stop();
+			if(vif.i2c_sda) @(posedge vif.i2c_sda);
 
 			seq_item_port.item_done();
 		end
   endtask
 
-	virtual task send_start();
+	virtual task drive_start();
 		@(posedge vif.clk);
 		vif.start <= 1;
+		vif.rw <= 1;
+		$display("DRIVER: START STATE");
 	endtask
 
-	virtual task send_addr();
+	virtual task drive_addr();
 		foreach (tr.addr[i]) begin
-			@(negedge vif.i2c_scl);
 			vif.addr[6-i] <= tr.addr[6-i];
 		end
+		$display("DRIVER: ADDR STATE");
 	endtask
 
-	virtual task send_data();
+	virtual task drive_write_data();
 		foreach (tr.w_data[i])begin
-			@(negedge vif.i2c_scl);
 			vif.w_data[7-i] <= tr.w_data[7-i];
 		end
+		$display("DRIVER: DATA STATE");
 	endtask
 
-	virtual task send_rw();
-		repeat(8) @(negedge vif.i2c_scl);
-		vif.rw <= rw_logic;
-	endtask
-
-	virtual task set_addr_acknowledge();
-		repeat(10) @(negedge vif.i2c_scl);
-		vif.i2c_sda <= ack_addr;
-	endtask
-
-	virtual task set_data_acknowledge();
-		repeat(9) @(negedge vif.i2c_scl);
-		vif.i2c_sda <= ack_data;
-	endtask
-
-	/*task scl_gen();
-		repeat(9) begin
-			repeat(cfg.clk_divider) @(posedge vif.clk) vif.scl = ~vif.scl;
+	/*virtual task drive_read_data();
+		foreach (tr.r_data[i])begin
+			@(negedge vif.i2c_scl);
+			vif.i2c_sda <= tr.r_data[7-i];
 		end
 	endtask*/
 
-	virtual task send_stop();
-		@(posedge vif.clk);
+	virtual task drive_rw();
+		repeat(8) @(negedge vif.i2c_scl);
+		vif.rw <= 0;
+		$display("DRIVER: RW STATE");
+	endtask
+
+	virtual task drive_addr_acknowledge();
+		repeat(9) @(negedge vif.i2c_scl);
+		vif.i2c_sda <= 1;
+	endtask
+
+	virtual task drive_data_acknowledge();
+		repeat(10) @(negedge vif.i2c_scl);
+		vif.i2c_sda <= 0;
+	endtask
+
+	virtual task drive_stop();
 		vif.stop <=1;
+		$display("DRIVER: STOP STATE");
 	endtask
 
 

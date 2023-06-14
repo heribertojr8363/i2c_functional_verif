@@ -16,10 +16,11 @@ UVM_PLI
 ../script
 ../src/i2c_pkg.svh
 ../tb/top_pkg.sv
-../src/i2c_interface.sv
+../src/i2c_interface.svh
 ../tb/top.sv
 -DEFINE
 ALL
+-ALLOWREDEFINITION
 -CDSLIB
 ./xcelium.d/run.lnx8664.20.09.d/cdsrun.lib
 -HDLVAR

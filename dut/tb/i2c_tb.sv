@@ -1,18 +1,10 @@
 `timescale 1ns/1ps
+`include "../../verification/src/i2c_interface.svh"
 
 module tb;
 
-    logic clk;
-    logic reset;
-    logic start_in;
-    logic stop_in;
-    logic rw_in;
-    logic [6:0] addr_in;
-    logic [7:0] data_in;
-    logic go;
-
-    wire i2c_sda;
-    logic i2c_slc;
+    bit clk;
+    bit reset;
     //logic fifo_full;
 
     //logic i2c_clk;
@@ -34,19 +26,10 @@ module tb;
         .fifo_full(fifo_full),
         .ready_out(ready_out)
     );*/
+    
+    i2c_interface dut_if (.clk(clk),.reset(reset));
 
-    i2c_master dut(
-        .clk(clk),
-        .reset(reset),
-        .start(start_in),
-        .stop(stop_in),
-        .rw(rw_in),
-        .addr(addr_in),
-        .w_data(data_in),
-
-        .i2c_scl(i2c_slc),
-        .i2c_sda(i2c_sda)
-    );
+    i2c_master dut(dut_if);
 
 
     initial begin
@@ -66,15 +49,15 @@ module tb;
         #5;
 
         @(negedge clk);
-        start_in = 'h1;
-        stop_in = 'h0;
-        rw_in = 'h0;
-        addr_in = 7'h55;
-        data_in = 8'haa;
+        dut_if.start = 'h1;
+        dut_if.stop = 'h0;
+        dut_if.rw = 'h0;
+        dut_if.addr = 7'h55;
+        dut_if.w_data = 8'haa;
 
         #300;
 
-        stop_in = 'h1;
+        dut_if.stop = 'h1;
 
         #50;
         

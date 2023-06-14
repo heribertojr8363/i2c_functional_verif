@@ -15,7 +15,7 @@ RTL_FILES = $(I2C_DIR)/src/i2c_master.sv
 BENCH_FILES = $(BENCH_DIR)/i2c_tb.sv
 
 # Comando para executar o Xcelium
-XCELIUM_CMD = xrun -sv $(XCELIUM_FLAGS)
+XCELIUM_CMD = xrun -sv $(XCELIUM_FLAGS) -ALLOWREDEFINITION
 
 all:
 	$(XCELIUM_CMD) $(RTL_FILES) $(BENCH_FILES)

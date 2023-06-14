@@ -11,6 +11,7 @@
 -INCDIR
 ../src
 -default_port_array_wire
+-ALLOWREDEFINITION
 ../src/i2c_master.sv
 ../tb/i2c_tb.sv
 -CDSLIB

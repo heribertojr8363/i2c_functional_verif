@@ -50,3 +50,8 @@
 ../tb/macros/uvm_deprecated_defines.svh
 ../src/macros/uvm_deprecated_defines.svh
 ../script/macros/uvm_deprecated_defines.svh
+./i2c_master.sv
+./i2c_pkg.svh
+../tb/i2c_pkg.svh
+./i2c_interface.svh
+../tb/i2c_interface.svh

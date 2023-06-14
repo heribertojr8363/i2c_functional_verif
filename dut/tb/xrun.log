@@ -1,5 +1,5 @@
 xrun(64): 20.09-s010: (c) Copyright 1995-2021 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	20.09-s010: Started on Jun 12, 2023 at 20:52:36 -03
+TOOL:	xrun(64)	20.09-s010: Started on Jun 13, 2023 at 19:36:43 -03
 xrun
 	-sv
 	-access rwc
@@ -7,8 +7,53 @@ xrun
 	+incdir+../src
 	-input shm.tcl
 	-default_port_array_wire
+	-ALLOWREDEFINITION
 	../src/i2c_master.sv
 	../tb/i2c_tb.sv
+file: ../src/i2c_master.sv
+	interface worklib.i2c_interface:svh
+		errors: 0, warnings: 0
+	module worklib.i2c_master:sv
+		errors: 0, warnings: 0
+file: ../tb/i2c_tb.sv
+interface i2c_interface (input bit clk, input bit reset);
+                      |
+xmvlog: *W,RECOME (./../../verification/src/i2c_interface.svh,1|22): recompiling design unit worklib.i2c_interface:svh.
+	First compiled from line 1 of ../../verification/src/i2c_interface.svh.
+(`include file: ./../../verification/src/i2c_interface.svh line 1, file: ../tb/i2c_tb.sv line 2)
+	interface worklib.i2c_interface:svh
+		errors: 0, warnings: 1
+	module worklib.tb:sv
+		errors: 0, warnings: 0
+xmvlog: *W,SPDUSD: Include directory ../tb given but not used.
+xmvlog: *W,SPDUSD: Include directory ../src given but not used.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 2
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		tb
+xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.i2c_master:sv <0x24a60133>
+			streams:  10, words: 12121
+		worklib.tb:sv <0x37d1347f>
+			streams:   4, words:  3658
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                 2       2
+		Interfaces:              1       1
+		Registers:              21      21
+		Scalar wires:            4       -
+		Always blocks:           4       4
+		Initial blocks:          2       2
+		Cont. assignments:       2       2
+		Pseudo assignments:      2       2
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.tb:sv
 Loading snapshot worklib.tb:sv .................... Done
 xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 xcelium> source /usr/local/cds/XCELIUM2009/tools/xcelium/files/xmsimrc
@@ -18,6 +63,6 @@ xcelium> probe -create tb -depth all -all -memories -shm -database waves
 Created probe 1
 xcelium> run 18 ms -absolute
 Simulation complete via $finish(1) at time 370 NS + 0
-./i2c_tb.sv:102         $finish();
+./i2c_tb.sv:85         $finish();
 xcelium> exit
-TOOL:	xrun(64)	20.09-s010: Exiting on Jun 12, 2023 at 20:52:38 -03  (total: 00:00:02)
+TOOL:	xrun(64)	20.09-s010: Exiting on Jun 13, 2023 at 19:36:45 -03  (total: 00:00:02)

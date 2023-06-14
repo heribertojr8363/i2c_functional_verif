@@ -9,7 +9,7 @@
 +incdir+../script
 ../src/i2c_pkg.svh
 ../tb/top_pkg.sv
-../src/i2c_interface.sv
+../src/i2c_interface.svh
 ../tb/top.sv
 +UVM_TESTNAME=my_test
 -covtest
@@ -18,3 +18,7 @@ my_test-100
 ALL
 -svseed
 100
+-gui
+-ALLOWREDEFINITION
+-access
++rwc

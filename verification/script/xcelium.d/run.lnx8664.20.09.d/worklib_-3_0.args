@@ -5,6 +5,7 @@
 -RUNMODE
 -DEFINE
 ALL
+-ALLOWREDEFINITION
 -I_INCDIR
 /usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d/sv/src
 -DEFINE
