@@ -4,12 +4,11 @@
 //
 +incdir+../tb
 +incdir+../src
++incdir+../../dut
 +incdir+../script
 -loadpli
 /usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d/additions/sv/lib/64bit/libuvmpli.so:uvm_pli_boot
 +UVM_TESTNAME=my_test
--ACCESS
-+rwc
 -MESSAGES
 -XLMODE
 ./xcelium.d/run.lnx8664.20.09.d

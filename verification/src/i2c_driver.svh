@@ -76,9 +76,9 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 				//@(negedge vif.i2c_scl);
 			end
 			else begin
-				@(negedge vif.i2c_scl);
-				//drive_read_data();
-				repeat(10) @(negedge vif.i2c_scl);
+				repeat(2) @(negedge vif.i2c_scl);
+				drive_read_data();
+				repeat(2) @(negedge vif.i2c_scl);
 			end
 			
 			//repeat(3) @(posedge vif.clk);
@@ -94,51 +94,51 @@ class i2c_driver extends uvm_driver #(i2c_sequence_item);
 		@(posedge vif.clk);
 		vif.start <= 1;
 		vif.rw <= 1;
-		$display("DRIVER: START STATE");
+		//$display("DRIVER: START STATE");
 	endtask
 
 	virtual task drive_addr();
 		foreach (tr.addr[i]) begin
 			vif.addr[6-i] <= tr.addr[6-i];
 		end
-		$display("DRIVER: ADDR STATE");
+		//$display("DRIVER: ADDR STATE");
 	endtask
 
 	virtual task drive_write_data();
 		foreach (tr.w_data[i])begin
 			vif.w_data[7-i] <= tr.w_data[7-i];
 		end
-		$display("DRIVER: DATA STATE");
+		//$display("DRIVER: DATA STATE");
 	endtask
 
-	/*virtual task drive_read_data();
-		foreach (tr.r_data[i])begin
+	virtual task drive_read_data();
+		for (int i = 0; i<8; i++) begin
 			@(negedge vif.i2c_scl);
 			vif.i2c_sda <= tr.r_data[7-i];
 		end
-	endtask*/
+	endtask
 
 	virtual task drive_rw();
 		repeat(8) @(negedge vif.i2c_scl);
-		vif.rw <= 0;
-		$display("DRIVER: RW STATE");
+		vif.rw <= tr.rw_logic;
+		//$display("DRIVER: RW STATE");
 	endtask
 
 	virtual task drive_addr_acknowledge();
 		repeat(9) @(negedge vif.i2c_scl);
 		vif.i2c_sda <= 1;
-		$display("DRIVER: ADDR_ACK STATE");
+		//$display("DRIVER: ADDR_ACK STATE");
 	endtask
 
 	virtual task drive_data_acknowledge();
 		repeat(10) @(negedge vif.i2c_scl);
 		vif.i2c_sda <= 0;
-		$display("DRIVER: DATA_ACK STATE");
+		//$display("DRIVER: DATA_ACK STATE");
 	endtask
 
 	virtual task drive_stop();
 		vif.stop <=1;
-		$display("DRIVER: STOP STATE");
+		//$display("DRIVER: STOP STATE");
 	endtask
 
 

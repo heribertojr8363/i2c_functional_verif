@@ -7,6 +7,8 @@
 -INCDIR
 ../src
 -INCDIR
+../../dut
+-INCDIR
 ../script
 -DEFINE
 ALL

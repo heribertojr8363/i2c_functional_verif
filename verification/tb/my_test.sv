@@ -17,7 +17,7 @@ class my_test extends uvm_test;
 
     task main_phase(uvm_phase phase);
         phase.raise_objection(this);
-        seq.start(env.agt.sqr);
+        seq.start(env.i2c_agt.sqr);
         phase.drop_objection(this);
     endtask
 

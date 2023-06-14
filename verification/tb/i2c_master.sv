@@ -132,7 +132,7 @@ module i2c_master (i2c_interface.master vif);
                 end
 
                 STATE_ACK_WDATA: begin
-			if(vif.stop) next <= STATE_STOP;
+			        if(vif.stop) next <= STATE_STOP;
                         //io <= 0;
                 end
 
@@ -210,7 +210,9 @@ module i2c_master (i2c_interface.master vif);
                 io = 0;
                 sda_enable = 1;
 
-                if(!io) r_data[count] = sda;
+                if(!io) begin r_data[count] = vif.i2c_sda;
+			      sda = vif.i2c_sda;
+		end
                 else sda = sda;
             end
 
@@ -232,7 +234,7 @@ module i2c_master (i2c_interface.master vif);
                 io = 1;
                 sda_enable = 1;
 
-                if(io) sda = 0;
+                if(io) sda = 1;
                 else sda = sda;
             end
 

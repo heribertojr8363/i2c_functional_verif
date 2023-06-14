@@ -36,6 +36,12 @@
 /home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/src/i2c_monitor.svh
 ../src/i2c_agent.svh
 /home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/src/i2c_agent.svh
+../src/i2c_sb_subscriber.svh
+/home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/src/i2c_sb_subscriber.svh
+../src/i2c_scoreboard.svh
+/home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/src/i2c_scoreboard.svh
+../src/i2c_subscriber.svh
+/home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/src/i2c_subscriber.svh
 ../tb/my_env.sv
 /home/heriberto.junior/Desktop/i2c/i2c_functional_verif/verification/tb/my_env.sv
 ../tb/my_test.sv

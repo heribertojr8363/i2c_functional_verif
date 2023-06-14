@@ -13,6 +13,8 @@ UVM_PLI
 -INCDIR
 ../src
 -INCDIR
+../../dut
+-INCDIR
 ../script
 ../src/i2c_pkg.svh
 ../tb/top_pkg.sv

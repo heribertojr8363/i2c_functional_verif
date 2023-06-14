@@ -6,6 +6,7 @@
 -uvm
 +incdir+../tb
 +incdir+../src
++incdir+../../dut
 +incdir+../script
 ../src/i2c_pkg.svh
 ../tb/top_pkg.sv
@@ -18,8 +19,4 @@ my_test-100
 ALL
 -svseed
 100
--gui
 -ALLOWREDEFINITION
--access
-+rwc
--s

@@ -63,7 +63,7 @@ class i2c_monitor extends uvm_monitor;
             @(negedge vif.clk);
 		    tr.start <= vif.i2c_sda;
             tr.scl_start <= vif.i2c_scl;
-		$display("MONITOR: START STATE");
+		//$display("MONITOR: START STATE");
 
 	endtask
 
@@ -73,17 +73,18 @@ class i2c_monitor extends uvm_monitor;
                 @(posedge vif.i2c_scl);
 			    tr.addr[i] <= vif.i2c_sda;
 		    end
-		$display("MONITOR: ADDR STATE");
+		//$display("MONITOR: ADDR STATE");
 
 	endtask
 
 	virtual task collect_write_data();
-
-            foreach (tr.w_data[i])begin
+			
+			foreach (tr.recovery_w_data[i])begin
                 @(posedge vif.i2c_scl);
 			    tr.recovery_w_data[i] <= vif.i2c_sda;
+				tr.w_data[i] <= vif.w_data[i];
 		    end
-		$display("MONITOR: WRITE DATA STATE");
+		//$display("MONITOR: WRITE DATA STATE");
 
 	endtask
 
@@ -101,7 +102,7 @@ class i2c_monitor extends uvm_monitor;
 
             repeat(8) @(posedge vif.i2c_scl);
 		    tr.rw_logic <= vif.i2c_sda;
-		$display("MONITOR: RW STATE");
+		//$display("MONITOR: RW STATE");
 
 	endtask
 
@@ -109,15 +110,15 @@ class i2c_monitor extends uvm_monitor;
 
 		repeat(9) @(posedge vif.i2c_scl);
 		tr.ack_addr <= vif.i2c_sda;
-		$display("MONITOR: ADDR_ACK STATE");
+		//$display("MONITOR: ADDR_ACK STATE");
 
 	endtask
 
 	virtual task collect_data_acknowledge();
 
-		repeat(10) @(posedge vif.i2c_scl);
+		repeat(11) @(posedge vif.i2c_scl);
 		tr.ack_data <= vif.i2c_sda;
-		$display("MONITOR: DATA_ACK STATE");
+		//$display("MONITOR: DATA_ACK STATE");
 
 	endtask
 
@@ -126,7 +127,7 @@ class i2c_monitor extends uvm_monitor;
 		@(negedge vif.clk);
 		tr.stop <= vif.i2c_sda;
 		tr.scl_stop <= vif.i2c_scl;
-		$display("MONITOR: STOP STATE");
+		//$display("MONITOR: STOP STATE");
 
 	endtask
 
