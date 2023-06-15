@@ -12,7 +12,7 @@ class i2c_sequence extends uvm_sequence #(i2c_sequence_item);
   endfunction: new
 
   task body;
-    repeat(200) begin
+    repeat(1000) begin
       tr = i2c_sequence_item::type_id::create("tr");
       start_item(tr);
       assert(tr.randomize());

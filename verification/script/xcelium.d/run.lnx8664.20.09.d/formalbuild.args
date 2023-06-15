@@ -7,5 +7,7 @@
 -COVTEST
 my_test-125
 -COVERAGE
+all
+-COVERAGE
 u
 -UPDATE

@@ -29,7 +29,7 @@ TRANSA = 5000
 
 run:
 	@xrun -64bit -uvm +incdir+$(VTB) +incdir+$(VSRC) +incdir+$(DUT) +incdir+$(VSCRIPT) $(PKGS_VIP) $(PKGS) $(IF) $(VTB)/top.sv \
-    +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) -ALLOWREDEFINITION -cov_cgsample -coverage u
+    +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) -ALLOWREDEFINITION +nccoverage+all -cov_cgsample -coverage u
 
 clean:
 	@rm -rf INCA_libs waves.shm rtlsim/* *.history *.log rtlsim/* *.key mdv.log imc.log imc.key ncvlog_*.err *.trn *.dsn .simvision/ xcelium.d simv.daidir *.so *.o *.err cov_work simvision* *.out *.txt

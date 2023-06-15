@@ -20,6 +20,7 @@ ALL
 -svseed
 125
 -ALLOWREDEFINITION
++nccoverage+all
 -cov_cgsample
 -coverage
 u

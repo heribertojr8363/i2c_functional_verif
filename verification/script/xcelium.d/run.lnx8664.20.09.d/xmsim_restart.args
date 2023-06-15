@@ -8,6 +8,7 @@
 +incdir+../src
 +incdir+../../dut
 +incdir+../script
++nccoverage+all
 -uvmhome
 /usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d
 -sv_lib
@@ -24,7 +25,7 @@ my_test-125
 +EMGRLOG
 xrun.log
 -XLSTIME
-1686799146
+1686800228
 -XLKEEP
 -XLMODE
 ./xcelium.d/run.lnx8664.20.09.d
@@ -38,4 +39,4 @@ xrun
 -XLVERSION
 "TOOL:	xrun(64)	20.09-s010"
 -XLNAME
-./xcelium.d/run.lnx8664.20.09.d/micro.eletronica_13008
+./xcelium.d/run.lnx8664.20.09.d/micro.eletronica_17489

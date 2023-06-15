@@ -12,7 +12,6 @@ class i2c_subscriber extends uvm_subscriber#(i2c_sequence_item);
       ack_data_cp:      coverpoint tr.ack_data {bins ack_true = {1};}
       stop_cp:          coverpoint tr.stop {bins stp_true = {1};}
       scl_stop_cp:      coverpoint tr.scl_start {bins stp_scl_true = {1};}
-      cross start_cp, scl_start_cp, addr_cp, rw_logic_cp, recovery_data_cp, ack_data_cp, stop_cp, scl_start_cp;
    endgroup: i2c_cg
  
    function new(string name, uvm_component parent);
