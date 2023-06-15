@@ -14,9 +14,9 @@
 /usr/local/cds/XCELIUM2009/tools/methodology/UVM/CDNS-1.1d/additions/sv/lib/64bit/libuvmpli.so
 +UVM_TESTNAME=my_test
 -COVTEST
-my_test-100
+my_test-125
 -SVSEED
-100
+125
 -MESSAGES
 -RUN
 -SV_LIB
@@ -24,7 +24,7 @@ my_test-100
 +EMGRLOG
 xrun.log
 -XLSTIME
-1686780387
+1686799146
 -XLKEEP
 -XLMODE
 ./xcelium.d/run.lnx8664.20.09.d

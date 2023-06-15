@@ -23,7 +23,7 @@ PKGS = $(VTB)/top_pkg.sv
 #$(PKGS_TYPES) $(PKGS_VIP) $(PKGS)
 
 MODE = ALL
-SEED = 100
+SEED = 125
 COVER = 100
 TRANSA = 5000
 
@@ -32,7 +32,7 @@ run:
     +UVM_TESTNAME=my_test -covtest my_test-$(SEED) -define $(MODE) -svseed $(SEED) -ALLOWREDEFINITION -cov_cgsample -coverage u
 
 clean:
-	@rm -rf INCA_libs waves.shm rtlsim/* *.history *.log rtlsim/* *.key mdv.log imc.log imc.key ncvlog_*.err *.trn *.dsn .simvision/ xcelium.d simv.daidir *.so *.o *.err cov_work simvision* *.out
+	@rm -rf INCA_libs waves.shm rtlsim/* *.history *.log rtlsim/* *.key mdv.log imc.log imc.key ncvlog_*.err *.trn *.dsn .simvision/ xcelium.d simv.daidir *.so *.o *.err cov_work simvision* *.out *.txt
 
 rebuild: clean sim
 
