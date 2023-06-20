@@ -1,0 +1,7 @@
+Sinal,Tamanho,I/O,Sync,Signed,Descrição
+rstn_i,1,I,Async,u,"Reset,assíncronoeBAIXOativo"
+clk_i,1,I,clk,u,Clockfuncional
+enb_i,1,I,clk,u,Validdeentrada
+dtx_i,D_WIDTH,I,clk,s,Dadosdeentrada
+dty_i,D_WIDTH,I,clk,s,Dadosdeentrada
+dt_o,D_WIDTH,O,clk,s,Coeficientesdeentrada

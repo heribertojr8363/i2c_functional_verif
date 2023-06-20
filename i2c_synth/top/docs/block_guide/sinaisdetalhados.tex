@@ -1,0 +1,79 @@
+\newpage
+
+\section{Descrição dos sinais da interface} % (fold)
+\label{sec:descrição_detalhada_de_sinais}
+
+\subsection{Interface de Controle}
+\label{sec:if_controle}
+
+\begin{table}[H]
+  \centering
+  \renewcommand\arraystretch{1.25}
+  \caption{Sinais de interface de controle detalhados.}
+  \vspace{2mm}
+  \begin{tabular}{|P{4.0cm}|P{0.7cm}|P{1.5cm}|P{8cm}|}
+    \hline
+    \textbf{Sinal}        & \textbf{I/O} & \textbf{Tamanho} & \textbf{Descrição}                                    \\ \hline
+    clk\_i                 & I            & 1                & Clock síncrono                                       \\ \hline
+    rst\_ni                & I            & 1                & Reset assíncrono baixo ativo                         \\ \hline
+    test\_en\_i            & I            & 1                & Chaveia todos os clocks para test                    \\ \hline
+ \end{tabular} 
+\end{table}
+Para uma descrição mais detalhada dos sinais e informação sobre os sinais não citados, olhar a documentação da ARM, que pode ser encontrada na sessão de Bibliografia
+\subsection{RISC-V}
+\label{sec:riscv}
+\begin{table}[H]
+  \centering
+  \renewcommand\arraystretch{1.25}
+  \caption{Sinais de interface de controle do RISCV.}
+  \vspace{2mm}
+  \begin{tabular}{|P{4.0cm}|P{0.7cm}|P{1.5cm}|P{8cm}|}
+    \hline
+    \textbf{Sinal}        & \textbf{I/O} & \textbf{Tamanho} & \textbf{Descrição}                                    \\ \hline
+    clk\_i                 & I            & 1                & Clock síncrono                                       \\ \hline
+    rst\_ni                & I            & 1                & Reset assíncrono baixo ativo                          \\ \hline
+     fetch\_ enable\_i               & I            & 1    & Permite que o core realize fetch da memória de instruções \\ \hline
+     boot\_ addr\_i               & I            & 1    & Endereço no qual o boot é iniciado \\ \hline
+      debug\_ halt\_i              & I            & 1                & Para o core para permitir o acesso a seus registradores internos                          \\ \hline
+       debug\_ resume\_i                & I            & 1                & Retorna a funcionalidade do core, após este ter sido "haltado" \\ \hline
+\end{tabular} 
+\end{table}
+\subsection{AXI}
+\label{sec:axi}
+\begin{table}[H]
+  \centering
+  \renewcommand\arraystretch{1.25}
+  \caption{Sinais de interface de controle do RISCV.}
+  \vspace{2mm}
+  \begin{tabular}{|P{4.0cm}|P{0.7cm}|P{1.5cm}|P{8cm}|}
+    \hline
+    \textbf{Sinal}        & \textbf{I/O} & \textbf{Tamanho} & \textbf{Descrição}                                    \\ \hline
+    clk\_i                 & I            & 1                & Clock síncrono                                       \\ \hline
+    rst\_ni                & I            & 1                & Reset assíncrono baixo ativo                          \\ \hline
+    slave               & I            & 1    & interface na qual são conectados os escravos(slaves) do sistema \\ \hline
+     master              & I            & 1                & interface na qual são conectados os mestres(masters) do sistema \\ \hline
+       test\_ en\_i                & I            & 1                & sinal de teste \\ \hline
+\end{tabular} 
+\end{table}
+
+\subsection{JTAG}
+\label{sec:jtag}
+\begin{table}[H]
+  \centering
+  \renewcommand\arraystretch{1.25}
+  \caption{Sinais de interface de controle do RISCV.}
+  \vspace{2mm}
+  \begin{tabular}{|P{4.0cm}|P{0.7cm}|P{1.5cm}|P{8cm}|}
+    \hline
+    \textbf{Sinal}        & \textbf{I/O} & \textbf{Tamanho} & \textbf{Descrição}                                    \\ \hline
+    clk\_i                 & I            & 1                & Clock síncrono                                       \\ \hline
+    rstn\_i                & I            & 1                & Reset assíncrono baixo ativo                          \\ \hline
+    tclk\_i                 & I            & 1                & clock de teste, geralmente é mais lento que o clk\_i \\ \hline
+    trstn\_i                & I            & 1                & Test reset \\ \hline
+    tms               & I            & 1    & seleciona o modo de teste \\ \hline
+       tdi              & I            & 1    & entrada serial do jtag \\ \hline
+     tdo              & I            & 1    & saída serial do jtag \\ \hline
+
+\end{tabular} 
+\end{table}
+% section descrição_detalhada_de_sinais (end)

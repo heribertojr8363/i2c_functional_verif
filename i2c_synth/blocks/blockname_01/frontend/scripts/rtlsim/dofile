@@ -1,0 +1,30 @@
+# +XMENHDR----------------------------------------------------------------------
+# Copyright (c) 2018 XMEN-UFCG. All rights reserved
+# XMEN-UFCG Confidential Proprietary
+#------------------------------------------------------------------------------
+# FILE NAME            : dolfile
+# AUTHOR               : Bruno Silva
+# AUTHOR'S E-MAIL      : bruno.silva@embedded.ufcg.edu.br
+# -----------------------------------------------------------------------------
+# RELEASE HISTORY
+# VERSION  DATE        AUTHOR              DESCRIPTION
+# 0.1      2019-02-26  bruno.silva         Initial version
+# 0.2      2019-03-01  bruno.silva         Revised
+# 0.3      2019-03-21  bruno.silva         Revised -new dir.
+# -----------------------------------------------------------------------------
+# KEYWORDS: rtl level simulation, power analysis (setup)
+# -----------------------------------------------------------------------------
+# PURPOSE: rtl level simulation
+# -----------------------------------------------------------------------------
+# REUSE ISSUES
+#   Other: N/A
+# -XMENHDR----------------------------------------------------------------------
+database -open -vcd -into ../../switching/xxx_rtl.vcd rtl
+probe -create -depth all -tasks -functions -all -database rtl
+
+database -open waves -into waves.shm -default -event
+probe -create xxx_tb -depth all -tasks -functions -all -memories -database waves
+
+dumptcf -scope xxx_tb.xxx -internal -dumpwireasnet -overwrite -output ../../switching/xxx_rtl.tcf
+run
+dumptcf -end

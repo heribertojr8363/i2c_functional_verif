@@ -1,0 +1,46 @@
+# +PEMHDR----------------------------------------------------------------------
+# Copyright (c) 2018 PEM-UFCG. All rights reserved
+# PEM-UFCG Confidential Proprietary
+#------------------------------------------------------------------------------
+# FILE NAME            : setup
+# AUTHOR               : Bruno Silva
+# AUTHOR'S E-MAIL      : bruno.silva@embedded.ufcg.edu.br
+# -----------------------------------------------------------------------------
+# RELEASE HISTORY
+# VERSION  DATE        AUTHOR              DESCRIPTION
+# 0.1      2019-02-26  bruno.silva         Initial version
+# 0.2      2019-03-21  bruno.silva         Revised -new dir.
+# -----------------------------------------------------------------------------
+# KEYWORDS: gate level simulation, STA, power analysis
+# -----------------------------------------------------------------------------
+# PURPOSE: gate level simulation
+# -----------------------------------------------------------------------------
+# REUSE ISSUES
+#   Other: N/A
+# -PEMHDR----------------------------------------------------------------------
+ -top xxx_tb \
+ -timescale 1ns/1ps \
+ -access rwc \
+ -define NETLIST \
+ #-define DFT \
+ -define SDF_FILE=../../timing/xxx.sdf \
+ -define SDF_LOG_FILE=../../logs/gatesim/gatesim_sdf_backannotate_xxx.log \
+ -define DESIGN=xxx \
+ -sdf_simtime \
+ -maxdelays \
+ -sdf_verbose \
+ -nocopyright \
+ -64bit \
+ -clean \
+ -sv \
+ -input ../../scripts/gatesim/dofile \
+ -l ../../logs/gatesim/gatesim_xxx.log \
+ -defparam xxx_tb.PERIOD=20 \
+ #-v ${VERILOG_STD} \
+ -v /mnt/hdd1tera/xfab_xh018/xh018/diglibs/D_CELLS_HD/v3_0/verilog/v3_0_0/VLG_PRIMITIVES.v \
+ -v /mnt/hdd1tera/xfab_xh018/xh018/diglibs/D_CELLS_HD/v3_0/verilog/v3_0_0/D_CELLS_HD.v \
+ #-define MEMINIT=1 \
+ #${MODELLIST} \
+ #${NETLIST} \
+ ../../structural/xxx.v \
+ ../../rtl/tb/xxx_tb.sv \

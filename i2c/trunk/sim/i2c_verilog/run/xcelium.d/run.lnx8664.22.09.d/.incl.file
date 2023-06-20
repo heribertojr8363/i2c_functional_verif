@@ -1,4 +1,0 @@
-./timescale.v
-../../../bench/verilog/timescale.v
-./i2c_master_defines.v
-../../../bench/verilog/i2c_master_defines.v

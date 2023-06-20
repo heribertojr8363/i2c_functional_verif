@@ -8,7 +8,7 @@ class i2c_subscriber extends uvm_subscriber#(i2c_sequence_item);
       scl_start_cp:     coverpoint tr.scl_start {bins str_scl_true = {1};}
       addr_cp:          coverpoint tr.addr;
       rw_logic_cp:      coverpoint tr.rw_logic;
-      recovery_data_cp: coverpoint tr.recovery_w_data;
+      w_data_cp:        coverpoint tr.w_data;
       ack_data_cp:      coverpoint tr.ack_data {bins ack_true = {1};}
       stop_cp:          coverpoint tr.stop {bins stp_true = {1};}
       scl_stop_cp:      coverpoint tr.scl_start {bins stp_scl_true = {1};}

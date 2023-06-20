@@ -1,0 +1,36 @@
+# +PEMHDR----------------------------------------------------------------------
+# Copyright (c) 2018 PEM-UFCG. All rights reserved
+# PEM-UFCG Confidential Proprietary
+#------------------------------------------------------------------------------
+# FILE NAME            : dofile
+# AUTHOR               : Bruno Silva
+# AUTHOR'S E-MAIL      : bruno.silva@embedded.ufcg.edu.br
+# -----------------------------------------------------------------------------
+# RELEASE HISTORY
+# VERSION  DATE        AUTHOR              DESCRIPTION
+# 0.1      2019-02-26  bruno.silva         Initial version
+# 0.2      2019-03-21  bruno.silva         Revised -new dir.
+# -----------------------------------------------------------------------------
+# KEYWORDS: gate level simulation, STA, power analysis
+# -----------------------------------------------------------------------------
+# PURPOSE: gate level simulation
+# -----------------------------------------------------------------------------
+# REUSE ISSUES
+#   Other: N/A
+# -PEMHDR----------------------------------------------------------------------
+database -open -vcd -into ../../switching/xxx_synth.vcd netlist
+probe -create -depth all -tasks -functions -all -database netlist
+
+database -open waves -into waves.shm -default -event
+probe -create xxx_tb -depth all -tasks -functions -all -memories -database waves
+
+# Deposit dos clock gatings
+set inst_list [find -nocase -newline -recursive *RC_CG_HIER*]
+foreach inst $inst_list  {
+   deposit ${inst}.ck_out  [expr {int(rand()*50) mod 2}]
+   puts ${inst}
+}
+
+dumptcf -scope xxx_tb.xxx -internal -flatformat -dumpwireasnet -overwrite -output ../../switching/xxx_synth.tcf
+run
+dumptcf -end

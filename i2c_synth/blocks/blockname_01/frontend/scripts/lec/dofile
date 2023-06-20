@@ -1,0 +1,82 @@
+// +XMENHDR----------------------------------------------------------------------
+// Copyright (c) 2018 XMEN-UFCG. All rights reserved
+// XMEN-UFCG Confidential Proprietary
+//------------------------------------------------------------------------------
+// FILE NAME            : dofile
+// AUTHOR               : Bruno Silva
+// AUTHOR'S E-MAIL      : bruno.silva@embedded.ufcg.edu.br
+// -----------------------------------------------------------------------------
+// RELEASE HISTORY
+// VERSION  DATE        AUTHOR              DESCRIPTION
+// 0.1      2019-02-26  bruno.silva         Initial version
+// 0.2      2019-03-01  bruno.silva         Revised
+// 0.3      2019-03-21  bruno.silva         Revised - new dir.
+// 0.4      2019-10-31  bruno.silva         Revised
+// 0.5      2020-01-29  bruno.silva         Revised - added the 1.2V library
+// -----------------------------------------------------------------------------
+// KEYWORDS: LEC, synthesis, BBOX and DFT
+// -----------------------------------------------------------------------------
+// PURPOSE: Logic equivalence checking (RTL vs GATE)
+// -----------------------------------------------------------------------------
+// REUSE ISSUES
+//   Other: N/A
+// -XMENHDR----------------------------------------------------------------------
+
+setenv DESIGN   xxx
+setenv RTLDIR   ../../rtl/src
+setenv VLOG_STD /mnt/hdd1tera/xfab_xh018/xh018/diglibs/D_CELLS_HD/v3_0/verilog/v3_0_0
+setenv LIB_STD  /mnt/hdd1tera/xfab_xh018/xh018/diglibs/D_CELLS_HD/v3_0/liberty_LPMOS/v3_0_1/PVT_1_80V_range/D_CELLS_HD_LPMOS_slow_1_62V_125C.lib
+setenv GATEDIR  ../../structural
+setenv LOGDIR   ../../logs/lec
+setenv USE_DCELL_1V2 0
+set log file $LOGDIR/lec_$DESIGN.log -replace
+
+tclmode
+if { $env(USE_DCELL_1V2) == 1 } {
+     set var /mnt/hdd1tera/xfab_xh018/xh018/diglibs/D_CELLS_HD/v3_0/liberty_LPMOS/v3_0_1/PVT_1_20V_range/D_CELLS_HD_LPMOS_slow_1_08V_125C.lib
+     set env(LIB_STD) $var
+}
+vpxmode
+
+// =============================================================================
+//Reading Golden Design
+// =============================================================================
+
+read design $RTLDIR/*.sv $VLOG_STD/VLG_PRIMITIVES.v $VLOG_STD/D_CELLS_HD.v -systemverilog -golden -replace
+set root module $DESIGN -golden
+
+// =============================================================================
+// Reading Timing Libraries
+// =============================================================================
+
+read library $LIB_STD -liberty -revised
+
+// =============================================================================
+// Reading Netlist
+// =============================================================================
+
+read design $GATEDIR/$DESIGN.v -verilog2k -revised
+
+// =============================================================================
+// Modeling Directives and Design Constraints
+// =============================================================================
+
+set system mode setup
+set flatten model -latch_fold
+set flatten model -gated_clock
+set flatten model -all_seq_merge
+set flatten model -seq_constant -seq_constant_x_to 0
+set flatten model -nodff_to_dlat_zero -nodff_to_dlat_feedback
+add pin constraints 0 dft_tm_i -both
+add pin constraints 0 dft_shift_en -revised
+
+// =============================================================================
+// Physical Verification
+// =============================================================================
+
+set system mode lec
+remodel -seq_merge
+add compare points -all
+compare
+
+exit -f
